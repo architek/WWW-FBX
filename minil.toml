@@ -1,0 +1,4 @@
+name = "WWW-FBX"
+# badges = ["travis"]
+module_maker="ModuleBuildTiny"
+
