@@ -5,10 +5,20 @@ WWW::FBX - It's new $module
 # SYNOPSIS
 
     use WWW::FBX;
+    my $fbx=WWW::FBX->new('MyAppId', 'MyAppName');
+    $fbx->connect;
+    eval {
+      $fbx->api_foo(user=>'Bar');
+    };
+    if (my $err=$@) {
+      die $@ unless blessed $err && err->isa('WWW::FBX::Error');
+      warn "HTTP error $err->status\n" if $err->is_http_error;
+      warn "API error $err->error\n" if $err->is_api_error;
+    }
 
 # DESCRIPTION
 
-WWW::FBX is ...
+WWW::FBX is a library for communicating with the REST API of the Freebox 6
 
 # LICENSE
 

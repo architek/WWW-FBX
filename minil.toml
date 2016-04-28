@@ -1,4 +1,6 @@
 name = "WWW-FBX"
 # badges = ["travis"]
 module_maker="ModuleBuildTiny"
+abstract_from="lib/WWW/FBX.pm"
+
 

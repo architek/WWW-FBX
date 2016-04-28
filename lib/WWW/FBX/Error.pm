@@ -1,6 +1,7 @@
-package WWW::FBX::Auth;
+package WWW::FBX::Error;
 use 5.008001;
-use Moo::Role;
+use Moose;
+
 
 1;
 __END__
@@ -9,15 +10,15 @@ __END__
 
 =head1 NAME
 
-WWW::FBX::Auth - It's new $module
+WWW::FBX::Error - It's new $module
 
 =head1 SYNOPSIS
 
-    use WWW::FBX::Auth;
+    use WWW::FBX::Error;
 
 =head1 DESCRIPTION
 
-WWW::FBX::Auth is FBX Authenticator role
+WWW::FBX::Error is FBX Error handling
 
 =head1 LICENSE
 

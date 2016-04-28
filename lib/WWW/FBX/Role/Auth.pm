@@ -1,6 +1,6 @@
-package WWW::FBX::APIv3.pm;
+package WWW::FBX::Role::Auth;
 use 5.008001;
-use Moo::Role;
+use Moose;
 
 1;
 __END__
@@ -9,15 +9,15 @@ __END__
 
 =head1 NAME
 
-WWW::FBX::APIv3 - Freebox API v3
+WWW::FBX::Auth - It's new $module
 
 =head1 SYNOPSIS
 
-    with 'WWW::FBX::APIv3';
+    use WWW::FBX::Role::Auth;
 
 =head1 DESCRIPTION
 
-WWW::FBX::APIv3 is the freebox6 API version 3 as a Moose Role
+WWW::FBX::Role::Auth is FBX Authenticator role
 
 =head1 LICENSE
 
