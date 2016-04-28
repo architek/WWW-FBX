@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use WWW::FBX::Core;
+use WWW::FBX;
 
-my $fbx = WWW::FBX::Core->new(
+my $fbx = WWW::FBX->new(
   appid => "APP ID", 
   appname => "APP NAME",
   traits => [qw/API::APIv3/],

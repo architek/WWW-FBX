@@ -1,152 +1,142 @@
 package WWW::FBX;
 use 5.008001;
-use strict;
-use warnings;
-
-our $VERSION = "0.01";
-
 use Moose;
-use Carp::Clan qw/^(?:Net::Twitter|Moose|Class::MOP)/;
+use Carp::Clan qw/^(?:WWW::FBX|Moose|Class::MOP)/;
+use JSON::MaybeXS;
+use URI::Escape;
+use HTTP::Request::Common;
+use WWW::FBX::Error;
+use Encode qw/encode_utf8/;
+use Try::Tiny;
+use LWP::UserAgent;
 
-use WWW::FBX::Core;
+with 'WWW::FBX::Role::API::APIv3';
  
 use namespace::autoclean;
 
-has '_trait_namespace' => (
-    Moose->VERSION >= '0.85' ? (is => 'bare') : (),
-    default => 'WWW::FBX::Role',
+my $fixed_version="1.0";
+our $VERSION="0.1";
+
+has lwp_args  => ( isa => 'HashRef', is => 'ro', default => sub { {} } );
+has username        => ( isa => 'Str', is => 'rw', predicate => 'has_username' );
+has password        => ( isa => 'Str', is => 'rw', predicate => 'has_password' );
+has ua              => ( isa => 'Object', is => 'rw', lazy => 1, builder => '_build_ua' );
+has clientname      => ( isa => 'Str', is => 'ro', default => 'Perl WWW::FBX' );
+has clientver       => ( isa => 'Str', is => 'ro', default => $fixed_version );
+has _base_url       => ( is => 'rw' ); ### keeps role composition from bitching ??
+has _json_handler   => (
+    is      => 'rw',
+    default => sub { JSON->new->allow_nonref->utf8 },
+    handles => { from_json => 'decode' },
 );
  
-# transform_trait and resolve_traits stolen from MooseX::Traits
-sub _transform_trait {
-    my ($class, $name) = @_;
-    my $namespace = $class->meta->find_attribute_by_name('_trait_namespace');
-    my $base;
-    if($namespace->has_default){
-        $base = $namespace->default;
-        if(ref $base eq 'CODE'){
-            $base = $base->();
-        }
-    }
+sub _natural_args {
+    my ( $self, $args ) = @_;
  
-    return $name unless $base;
-    return $1 if $name =~ /^[+](.+)$/;
-    return "$base\::$name";
+    map { $_ => $args->{$_} } grep !/^-/, keys %$args;
 }
  
-sub _resolve_traits {
-    my ($class, @traits) = @_;
+around BUILDARGS => sub {
+    my $next    = shift;
+    my $class   = shift;
  
-    return map {
-        unless ( ref ) {
-            $_ = $class->_transform_trait($_);
-            Class::Load::load_class($_);
-        }
-        $_;
-    } @traits;
-}
+    my %options = @_ == 1 ? %{$_[0]} : @_;
  
-sub _isa {
-    my $self = shift;
-    my $isa  = shift;
- 
-    return $isa eq __PACKAGE__ || $self->SUPER::isa($isa)
+    return $next->($class, \%options);
 };
  
-sub _create_anon_class {
-    my ($superclasses, $traits, $immutable, $package) = @_;
+sub _build_ua {
+    my $self = shift;
  
-    # Do we already have a meta class?
-    return $package->meta if $package->can('meta');
+    my $ua = LWP::UserAgent->new(%{$self->lwp_args});
  
-    my $meta;
-    $meta = WWW::FBX::Core->meta->create_anon_class(
-        superclasses => $superclasses,
-        roles        => $traits,
-        methods      => { meta => sub { $meta }, isa => \&_isa },
-        cache        => 0,
-        package      => $package,
-    );
-    $meta->make_immutable(inline_constructor => $immutable);
- 
-    return $meta;
+    return $ua;
 }
  
-{
-    my $serial_number = 0;
-    my %serial_for_params;
+sub _encode_args {
+    my ($self, $args) = @_;
  
-    sub _name_for_anon_class {
-        my @t = @{$_[0]};
+    # Values need to be utf-8 encoded.  Because of a perl bug, exposed when
+    # client code does "use utf8", keys must also be encoded.
+    # see: http://www.perlmonks.org/?node_id=668987
+    # and: http://perl5.git.perl.org/perl.git/commit/eaf7a4d2
+    return { map { utf8::upgrade($_) unless ref($_); $_ } %$args };
+}
  
-        my @comps;
-        while ( @t ) {
-            my $t = shift @t;
-            if ( ref $t[0] eq 'HASH' ) {
-                my $params = shift @t;
-                my $sig = sha1_hex(JSON->new->utf8->encode($params));
-                my $sn  = $serial_for_params{$sig} ||= ++$serial_number;
-                $t .= "_$sn";
-            }
-            $t =~ s/(?:::|\W)/_/g;
-            push @comps, $t;
-        }
+sub _json_request {
+    my ($self, $http_method, $uri, $args, $content_type ) = @_;
  
-        my $ver = $VERSION;
-        $ver =~ s/\W/_/g;
+    my $msg = $self->_prepare_request($http_method, $uri, $args, $content_type);
+    my $res = $self->_send_request($msg);
  
-        return __PACKAGE__ . "_v${ver}_" .  join '__', 'with', sort @comps;
+    return $self->_parse_result($res, $args);
+}
+ 
+sub _prepare_request {
+    my ($self, $http_method, $uri, $args, $content_type ) = @_;
+ 
+    my $msg;
+ 
+    my %natural_args = $self->_natural_args($args);
+ 
+    $self->_encode_args(\%natural_args);
+    if( $http_method eq 'PUT' ) {
+        $msg = PUT(
+            $uri,
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            Content        => $self->_query_string_for( \%natural_args ) );
     }
+    elsif ( $http_method =~ /^(?:GET|DELETE)$/ ) {
+        $uri->query($self->_query_string_for(\%natural_args));
+        $msg = HTTP::Request->new($http_method, $uri);
+    }
+    elsif ( $http_method eq 'POST' ) {
+        if( $content_type && $content_type eq 'application/json' ) {
+            $msg = POST( $uri,  Content_Type => 'application/json', Content =>  encode_json \%natural_args );
+        }
+        else {
+            die;
+        }
+    }
+    else {
+        croak "unexpected HTTP method: $http_method";
+    }
+ 
+    return $msg;
+}
+ 
+# Make sure we encode arguments *exactly* the same way Net::OAuth does
+# ...by letting Net::OAuth encode them.
+sub _query_string_for {
+    my ( $self, $args ) = @_;
+
+    my @pairs;
+    while ( my ($k, $v) = each %$args ) {
+        push @pairs, join '=', map URI::Escape::uri_escape_utf8($_,'^\w.~-'), $k, $v;
+    }
+
+    return join '&', @pairs;
 }
 
-sub new {
-    my $class = shift;
+sub _send_request { shift->ua->request(shift) }
  
-    croak '"new" is not an instance method' if ref $class;
+sub _parse_result {
+    my ($self, $res, $args) = @_;
  
-    my %args = @_ == 1 && ref $_[0] eq 'HASH' ? %{$_[0]} : @_;
+    my $content = $res->content;
  
-    my $traits = delete $args{traits};
+    my $obj = length $content ? try { $self->from_json($content) } : {};
  
-    if ( defined (my $legacy = delete $args{legacy}) ) {
-        croak "Options 'legacy' and 'traits' are mutually exclusive. Use only one."
-            if $traits;
+    return $obj if $res->is_success && defined $obj;
  
-        $traits = [ $legacy ? 'Legacy' : 'API::REST' ];
-    }
+    my $error = WWW::FBX::Error->new(http_response => $res);
+#    $error->twitter_error($obj) if ref $obj;
  
-    $traits ||= [ qw/Legacy/ ];
- 
-    # ensure we have the OAuth trait if we have a consumer key (unless we've
-    # specified AppAuth)
-    if ( $args{consumer_key} && !grep $_ eq 'AppAuth', @$traits ) {
-        $traits = [ (grep $_ ne 'OAuth', @$traits), 'OAuth' ];
-    }
- 
-    # create a unique name for the created class based on trait names and parameters
-    my $anon_class_name = _name_for_anon_class($traits);
- 
-    $traits = [ $class->_resolve_traits(@$traits) ];
- 
-    my $superclasses = [ 'Net::Twitter::Core' ];
-    my $meta = _create_anon_class($superclasses, $traits, 1, $anon_class_name);
- 
-    # create a Net::Twitter::Core object with roles applied
-    my $new = $meta->name->new(%args);
- 
-    # rebless it to include a superclass, if we're being subclassed
-    if ( $class ne __PACKAGE__ ) {
-        unshift @$superclasses, $class;
-        my $final_meta = _create_anon_class(
-            $superclasses, $traits, 0, join '::', $class, $anon_class_name
-        );
-        bless $new, $final_meta->name;
-    }
- 
-    return $new;
+    die $error;
 }
- 
-__PACKAGE__->meta->make_immutable(inline_constructor => 0);
+
+__PACKAGE__->meta->make_immutable;
+
 1;
 __END__
 
@@ -159,20 +149,10 @@ WWW::FBX - It's new $module
 =head1 SYNOPSIS
 
     use WWW::FBX;
-    my $fbx=WWW::FBX->new('MyAppId', 'MyAppName');
-    $fbx->connect;
-    eval {
-      $fbx->api_foo(user=>'Bar');
-    };
-    if (my $err=$@) {
-      die $@ unless blessed $err && err->isa('WWW::FBX::Error');
-      warn "HTTP error $err->status\n" if $err->is_http_error;
-      warn "API error $err->error\n" if $err->is_api_error;
-    }
 
 =head1 DESCRIPTION
 
-WWW::FBX is a library for communicating with the REST API of the Freebox 6
+WWW::FBX is FBX core
 
 =head1 LICENSE
 
