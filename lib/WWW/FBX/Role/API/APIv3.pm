@@ -3,13 +3,51 @@ use 5.008001;
 use Moose::Role;
 use WWW::FBX::API;
 
-base_url 'apiurl';
+sub BUILD {
+  shift->api_version;
+}
 
 fbx_api_method api_version => (
   description => <<'',
 Get API version.
 
   path => 'api_version',
+  method => 'GET',
+  params => [],
+  required => [],
+);
+
+after api_version => sub {
+  my $uar = shift->uar;
+  my ($maj) = $uar->{api_version} =~ /(\d*)\./;
+  api_url( "$uar->{api_base_url}v$maj" );
+};
+
+fbx_api_method auth_progress => (
+  description => <<'',
+Monitor token status.
+
+  path => 'login/authorize/42',
+  method => 'GET',
+  params => [],
+  required => [],
+);
+
+fbx_api_method login => (
+  description => <<'',
+Get login challenge.
+
+  path => 'login/',
+  method => 'GET',
+  params => [],
+  required => [],
+);
+
+fbx_api_method connection => (
+  description => <<'',
+Connection settings.
+
+  path => 'connection/',
   method => 'GET',
   params => [],
   required => [],

@@ -1,6 +1,12 @@
 package WWW::FBX::Role::Auth;
 use 5.008001;
-use Moose;
+use Moose::Role;
+
+sub BUILD {
+  my $self=shift;
+  shift->api_version;
+
+}
 
 1;
 __END__

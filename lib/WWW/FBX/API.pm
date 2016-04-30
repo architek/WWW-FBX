@@ -1,24 +1,28 @@
 package WWW::FBX::API;
 use 5.008001;
-use Moose ();
-use Carp::Clan qw/^(?:Net::Twitter|Moose|Class::MOP)/;
+use Moose();
+use Carp::Clan qw/^(?:WWW::FBX|Moose|Class::MOP)/;
 use Moose::Exporter;
 use URI::Escape;
 
 use namespace::autoclean;
 
 Moose::Exporter->setup_import_methods(
-    with_caller => [ qw/base_url fbx_api_method/ ],
+    with_caller => [ qw/api_url base_url fbx_api_method/ ],
+#    also => 'Moose',
 );
 
-my $_base_url;
-sub base_url { $_base_url = $_[1] }
+#has base_url        => ( isa => 'Str', is => 'rw', default => "http://mafreebox.free.fr");
+#has api_url         => ( isa => 'Str', is => 'rw', default => "");
+my ($_api_url, $_base_url) = ( "", "http://mafreebox.free.fr" );
+
+sub api_url { $_api_url = $_[1]; }
+sub base_url { $_base_url = $_[1]; }
 
 sub fbx_api_method { 
     my $caller = shift;
     my $name   = shift;
     my %options = (
-        base_url_method => $_base_url,
         @_,
     );
  
@@ -62,10 +66,7 @@ sub fbx_api_method {
         $local_path =~ s,/:id$,, unless exists $args->{id}; # remove optional trailing id
         $local_path =~ s/:(\w+)/delete $args->{$1} or croak "required arg '$1' missing"/eg;
 
-        my $base="http://mafreebox.freebox.fr";
-        #my $uri = URI->new($self->${ \$options{base_url_method} } . "/$local_path");
-        my $uri = URI->new($base . "/$local_path");
- 
+        my $uri = URI->new($_base_url . $_api_url . "/$local_path");
         return $self->_json_request(
             $options{method},
             $uri,
@@ -89,7 +90,7 @@ sub fbx_api_method {
 
 package WWW::FBX::Meta::Method;
 use Moose;
-use Carp::Clan qw/^(?:Net::Twitter|Moose|Class::MOP)/;
+use Carp::Clan qw/^(?:WWW::FBX|Moose|Class::MOP)/;
 extends 'Moose::Meta::Method';
  
 use namespace::autoclean;
@@ -101,7 +102,6 @@ has params          => ( isa => 'ArrayRef[Str]', is => 'ro', default => sub { []
 has required        => ( isa => 'ArrayRef[Str]', is => 'ro', default => sub { [] } );
 has returns         => ( isa => 'Str', is => 'ro', predicate => 'has_returns' );
 has booleans        => ( isa => 'ArrayRef[Str]', is => 'ro', default => sub { [] } );
-has base_url_method => ( isa => 'Str', is => 'ro', required => 1 );
 has content_type     => ( isa => 'Str', is => 'ro', default => '' );
  
 #Build hash where keys are attribute names

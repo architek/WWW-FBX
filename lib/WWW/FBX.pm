@@ -3,6 +3,7 @@ use 5.008001;
 use Moose;
 use Carp::Clan qw/^(?:WWW::FBX|Moose|Class::MOP)/;
 use JSON::MaybeXS;
+use Scalar::Util qw/reftype/;
 use URI::Escape;
 use HTTP::Request::Common;
 use WWW::FBX::Error;
@@ -11,22 +12,24 @@ use Try::Tiny;
 use LWP::UserAgent;
 
 with 'WWW::FBX::Role::API::APIv3';
+with 'WWW::FBX::Role::Auth';
  
 use namespace::autoclean;
 
 my $fixed_version="1.0";
 our $VERSION="0.1";
 
-has lwp_args  => ( isa => 'HashRef', is => 'ro', default => sub { {} } );
+has lwp_args        => ( isa => 'HashRef', is => 'ro', default => sub { {} } );
 has username        => ( isa => 'Str', is => 'rw', predicate => 'has_username' );
 has password        => ( isa => 'Str', is => 'rw', predicate => 'has_password' );
-has ua              => ( isa => 'Object', is => 'rw', lazy => 1, builder => '_build_ua' );
+has ua              => ( isa => 'LWP::UserAgent', is => 'rw', lazy => 1, builder => '_build_ua' );
+has uar             => ( isa => 'HashRef', is => 'rw' );
 has clientname      => ( isa => 'Str', is => 'ro', default => 'Perl WWW::FBX' );
 has clientver       => ( isa => 'Str', is => 'ro', default => $fixed_version );
-has _base_url       => ( is => 'rw' ); ### keeps role composition from bitching ??
+
 has _json_handler   => (
     is      => 'rw',
-    default => sub { JSON->new->allow_nonref->utf8 },
+    default => sub { JSON->new->allow_nonref },
     handles => { from_json => 'decode' },
 );
  
@@ -68,8 +71,10 @@ sub _json_request {
  
     my $msg = $self->_prepare_request($http_method, $uri, $args, $content_type);
     my $res = $self->_send_request($msg);
- 
-    return $self->_parse_result($res, $args);
+
+    $self->uar( $self->_parse_result ($res, $args ) );
+
+    return $self->uar;
 }
  
 sub _prepare_request {
@@ -125,12 +130,19 @@ sub _parse_result {
  
     my $content = $res->content;
  
-    my $obj = length $content ? try { $self->from_json($content) } : {};
- 
-    return $obj if $res->is_success && defined $obj;
- 
+    my $j_obj = length $content ? try { $self->from_json($content) } : {};
+
+    #Die if message contains an API error (even on HTTP 200)
+    if ( ref $j_obj && reftype $j_obj eq 'HASH' && (exists $j_obj->{error_code} || exists $j_obj->{msg} ) ) {
+        die WWW::FBX::Error->new(fbx_error => $j_obj, http_response => $res);
+    }
+
+    #If no API error and HTTP is 200
+    return $j_obj if $res->is_success && defined $j_obj;
+
+    #Else die on HTTP failures, which might contain a json response or not
     my $error = WWW::FBX::Error->new(http_response => $res);
-#    $error->twitter_error($obj) if ref $obj;
+    $error->fbx_error($j_obj) if ref $j_obj;
  
     die $error;
 }
