@@ -3,4 +3,5 @@ name = "WWW-FBX"
 module_maker="ModuleBuildTiny"
 abstract_from="lib/WWW/FBX.pm"
 
-
+[release]
+pause_config="/home/lke/.pause"
