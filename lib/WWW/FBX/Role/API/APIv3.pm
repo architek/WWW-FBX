@@ -69,6 +69,107 @@ Open a session.
   required => [ qw/ app_id password / ],
 );
 
+#Download
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global download getters.
+
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(downloads/ downloads/stats);
+
+#Download feeds
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global download feed getters.
+
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(downloads/feeds/ downloads/feeds/);
+
+#Download config
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global download config getters.
+
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(downloads/config/);
+
+#FS
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global fs getters.
+
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(fs/tasks/);
+
+#Share
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global share getters.
+
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(share_link/);
+
+#Share
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global upload getters.
+
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(upload/);
+
+#AirMedia
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global airmedia getters.
+
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(airmedia/config airmedia/receivers/);
+
+#RRD
+
+#CALL
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global call getters.
+
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(call/log/);
+
+#CONTACTS
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global contacts getters.
+
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(contact/);
+
 #Connection
 fbx_api_method connection => (
   description => <<'',
@@ -182,7 +283,16 @@ Reset a freeplug.
   required => [ qw/suff/ ],
 );
 
+#DHCP
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global DHCP getters.
 
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(dhcp/config dhcp/static_lease dhcp/dynamic_lease);
 
 #FTP
 
@@ -206,6 +316,90 @@ Set the FTP config.
   required => [ ],
 );
 
+#NAT
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global NAT getters.
+
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(fw/dmz fw/redir/ fw/incoming/);
+
+#UPNP
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global UPNP getters.
+
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(upnpigd/config upnpigd/redir/);
+
+#LCD
+fbx_api_method lcd => (
+  description => <<'',
+Get the LCD config.
+
+  path => 'lcd/config/',
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+);
+fbx_api_method set_lcd => (
+  description => <<'',
+Set the LCD config.
+
+  path => 'lcd/config/',
+  method => 'PUT',
+  params => [ qw/brightness orientation orientation_forced/ ],
+  required => [ ],
+);
+
+#SHARES
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global Network Shares getters.
+
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(netshare/samba netshare/afp);
+
+#UPNPAV
+fbx_api_method upnpav => (
+  description => <<'',
+Get the UPNPAV config.
+
+  path => 'upnpav/config',
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+);
+fbx_api_method set_upnpav => (
+  description => <<'',
+Set the UPNPAV config.
+
+  path => 'upnpav/config',
+  method => 'PUT',
+  params => [ qw/enabled/],
+  required => [ qw/enabled/],
+);
+
+#SWITCH
+fbx_api_method switch_sts => (
+  description => <<'',
+Get the switch status.
+
+  path => 'switch/status/',
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+);
+
 #wifi
 fbx_api_method s'/'_'gr => (
   description => <<'',
@@ -216,6 +410,71 @@ Global Wifi getters.
   params => [ ],
   required => [ ],
 ) for qw(wifi/config wifi/ap wifi/bss wifi/planning wifi/mac_filter);
+
+#System
+fbx_api_method system => (
+  description => <<'',
+Get the system info.
+
+  path => 'system',
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+);
+
+fbx_api_method reboot => (
+  description => <<'',
+Reboot the system.
+
+  path => 'system/reboot',
+  method => 'POST',
+  params => [ ],
+  required => [ ],
+);
+
+#VPN server
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global VPN server getters.
+
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(vpn/ vpn/user/ vpn/ip_pool/);
+
+#VPN client
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global VPN client getters.
+
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(vpn_client/config/ vpn_client/status vpn_client/log); 
+
+#Storage
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global storage getters.
+
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(storage/disk/ storage/partition/);
+
+#Parental
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global parental getters.
+
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(parental/config/ parental/filter/);
 
 
 1;
