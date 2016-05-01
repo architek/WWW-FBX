@@ -56,7 +56,7 @@ sub fbx_api_method {
         # replace placeholder arguments
         my $local_path = $path;
         $local_path =~ s/:(\w+)/delete $args->{$1} or croak "required arg '$1' missing"/eg;
-        $local_path .= $args->{suff} if exists $args->{suff};
+        $local_path .= delete $args->{suff} if exists $args->{suff};
 
         my $uri = URI->new($_base_url . $_api_url . "/$local_path");
 
