@@ -22,7 +22,10 @@ sub fbx_api_method {
     my %options = (
         @_,
     );
- 
+
+    #Remove trailing _
+    $name =~ s/_$//;
+
     my $class = Moose::Meta::Class->initialize($caller);
  
     my ($arg_names, $path) = @options{qw/required path/};
