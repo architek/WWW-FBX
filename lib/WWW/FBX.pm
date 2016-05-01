@@ -59,7 +59,7 @@ sub _prepare_request {
         $msg = PUT( $uri, Content => encode_json  $args  );
     }
     elsif ( $http_method =~ /^(?:GET|DELETE)$/ ) {
-        $uri->query($self->_query_string_for($args));
+        $uri->query($self->_query_string_for($args)) if keys %$args;
         $msg = HTTP::Request->new($http_method, $uri);
     }
     elsif ( $http_method eq 'POST' ) {
