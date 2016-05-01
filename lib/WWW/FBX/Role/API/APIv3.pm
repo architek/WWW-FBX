@@ -494,6 +494,9 @@ WWW::FBX::Role::API::APIv3 - Freebox API v3
 
 WWW::FBX::Role::API::APIv3 is the freebox6 API version 3 as a Moose Role
 
+Current methods available:
+get_lan_config, upload, connection, connection_config, connection_config_ipv6, netshare_samba, fw_incoming, airmedia_receivers,  downloads_stats, wifi_config, wifi_mac_filter, fs_tasks, vpn_client_status, switch_sts, ftp_config, dhcp_config, parental_filter, fw_redir, fw_dmz, vpn_client_config, upnpav, connection_config_xdsl, vpn_client_log, connection_dyndns, parental_config, wifi_ap, vpn_ip_pool, upnpigd_redir, freeplugs_net, downloads, set_upnpav, api_version, storage_disk, contact, wifi_planning, wifi_bss, login, dhcp_dynamic_lease, system, list_hosts, airmedia_config, browse_lan_interface, set_ftp_config, vpn_user, auth_progress, storage_partition, reboot, downloads_config, open_session, reset_freeplug, vpn, share_link, set_lcd, call_log, dhcp_static_lease, lcd, upnpigd_config, netshare_afp, downloads_feeds, connection_config_ftth
+
 =head1 LICENSE
 
 Copyright (C) Laurent Kislaire.
