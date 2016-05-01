@@ -42,8 +42,19 @@
       },
       "runtime" : {
          "requires" : {
+            "Carp::Clan" : "0",
+            "Devel::StackTrace" : "0",
             "Digest::HMAC_SHA1" : "0",
-            "perl" : "5.008001"
+            "Encode" : "0",
+            "HTTP::Request" : "0",
+            "JSON::MaybeXS" : "0",
+            "LWP::UserAgent" : "0",
+            "Moose" : "0",
+            "Scalar::Util" : "0",
+            "Try::Tiny" : "0",
+            "URI" : "0",
+            "URI::Escape" : "0",
+            "perl" : "5.014001"
          }
       },
       "test" : {
@@ -64,5 +75,8 @@
          "web" : "https://github.com/architek/WWW-FBX"
       }
    },
-   "version" : "0.01"
+   "version" : "0.01",
+   "x_contributors" : [
+      "root <root@debian-asus>"
+   ]
 }
