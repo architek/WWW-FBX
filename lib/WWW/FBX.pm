@@ -56,10 +56,7 @@ sub _prepare_request {
     my $msg;
  
     if( $http_method eq 'PUT' ) {
-        $msg = PUT(
-            $uri,
-            'Content-Type' => 'application/x-www-form-urlencoded',
-            Content        => $self->_query_string_for( $args ) );
+        $msg = PUT( $uri, Content => encode_json  $args  );
     }
     elsif ( $http_method =~ /^(?:GET|DELETE)$/ ) {
         $uri->query($self->_query_string_for($args));
