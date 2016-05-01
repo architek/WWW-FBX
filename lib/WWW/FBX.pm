@@ -1,5 +1,4 @@
 package WWW::FBX;
-use 5.008001;
 use Moose;
 use Carp::Clan qw/^(?:WWW::FBX|Moose|Class::MOP)/;
 use JSON::MaybeXS;
@@ -156,7 +155,8 @@ Authentication is provided through the Auth role but other authentication mechan
 
         $res = $fbx->connection;
         print "Your ", $res->{result}{media}, " internet connection state is ", $res->{result}{state}, "\n";
-        $res = $fbx->reset_freeplug( {suff=>"F4:CA:E5:DE:AD:BE/reset/"} );
+        $fbx->set_ftp_config( {enabled => \1} );
+        $fbx->reset_freeplug( {suff=>"F4:CA:E5:DE:AD:BE/reset/"} );
     };
 
     if ( my $err = $@ ) {
