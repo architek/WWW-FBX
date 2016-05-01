@@ -161,6 +161,29 @@ Get the list of hosts on a given interface.
   required => [ qw/suff/ ],
 );
 
+#Freeplugs
+fbx_api_method freeplugs_net => (
+  description => <<'',
+Get freeplugs networks and information.
+
+  path => 'freeplug/',
+  method => 'GET',
+  params => [ qw/suff/ ],
+  required => [ ],
+);
+
+fbx_api_method reset_freeplug => (
+  description => <<'',
+Reset a freeplug.
+
+  path => 'freeplug/',
+  method => 'POST',
+  params => [ qw/suff/ ],
+  required => [ qw/suff/ ],
+);
+
+
+
 #FTP
 
 fbx_api_method ftp_config => (
@@ -182,6 +205,17 @@ Set the FTP config.
   params => [ qw/enabled allow_anonymous allow_anonymous_write password/ ],
   required => [ ],
 );
+
+#wifi
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Global Wifi getters.
+
+  path => $_,
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+) for qw(wifi/config wifi/ap wifi/bss wifi/planning wifi/mac_filter);
 
 
 1;

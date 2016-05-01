@@ -156,6 +156,7 @@ Authentication is provided through the Auth role but other authentication mechan
 
         $res = $fbx->connection;
         print "Your ", $res->{result}{media}, " internet connection state is ", $res->{result}{state}, "\n";
+        $res = $fbx->reset_freeplug( {suff=>"F4:CA:E5:DE:AD:BE/reset/"} );
     };
 
     if ( my $err = $@ ) {
