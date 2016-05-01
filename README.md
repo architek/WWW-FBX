@@ -50,7 +50,7 @@ Authentication is provided through the Auth role but other authentication mechan
 
 # DESCRIPTION
 
-This module provides a perl interface to the freebox v6 APIs. See [http://dev.freebox.fr/sdk/os/](http://dev.freebox.fr/sdk/os/) for a full description of the APIs.
+This module provides a perl interface to the [Freebox](https://en.wikipedia.org/wiki/Freebox#V6_generation.2C_Freebox_Revolution) v6 APIs. See [http://dev.freebox.fr/sdk/os/](http://dev.freebox.fr/sdk/os/) for a full description of the APIs.
 
 # METHODS AND ARGUMENTS
 
