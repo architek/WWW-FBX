@@ -2,6 +2,10 @@ Revision history for Perl extension WWW-FBX
 
 {{$NEXT}}
 
+0.03 2016-05-01T21:12:14Z
+    - quick GETters all done
+    - remove trailing _ from API sub calls
+
 0.02 2016-05-01T18:47:16Z
     - added build requirements
 
