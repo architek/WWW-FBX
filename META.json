@@ -42,6 +42,7 @@
       },
       "runtime" : {
          "requires" : {
+            "Digest::HMAC_SHA1" : "0",
             "perl" : "5.008001"
          }
       },
