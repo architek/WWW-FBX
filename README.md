@@ -62,6 +62,8 @@ Return values are perl hashes.
 
 The same response is also available through the uar method.
 
+This distribution is heavily inspired from [Net::Twitter](https://metacpan.org/pod/Net::Twitter).
+
 # LICENSE
 
 Copyright (C) Laurent Kislaire.

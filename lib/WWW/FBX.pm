@@ -186,6 +186,8 @@ Return values are perl hashes.
 
 The same response is also available through the uar method.
 
+This distribution is heavily inspired from L<Net::Twitter>.
+
 =head1 LICENSE
 
 Copyright (C) Laurent Kislaire.
