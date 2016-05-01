@@ -120,6 +120,8 @@ __PACKAGE__->meta->make_immutable;
 1;
 __END__
 
+=for html <a href="https://travis-ci.org/architek/WWW-FBX"><img src="https://travis-ci.org/architek/WWW-FBX.svg?branch=master"></a>
+
 =encoding utf-8
 
 =head1 NAME
