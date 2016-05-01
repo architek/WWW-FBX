@@ -69,15 +69,98 @@ Open a session.
   required => [ qw/ app_id password / ],
 );
 
+#Connection
 fbx_api_method connection => (
   description => <<'',
-Connection settings.
+Connection status.
 
   path => 'connection/',
   method => 'GET',
   params => [],
   required => [],
 );
+
+fbx_api_method connection_config => (
+  description => <<'',
+Connection settings.
+
+  path => 'connection/config/',
+  method => 'GET',
+  params => [],
+  required => [],
+);
+
+fbx_api_method connection_config_ipv6 => (
+  description => <<'',
+Connection settings for IPV6.
+
+  path => 'connection/ipv6/config/',
+  method => 'GET',
+  params => [],
+  required => [],
+);
+
+fbx_api_method connection_config_xdsl => (
+  description => <<'',
+Connection settings for xdsl.
+
+  path => 'connection/xdsl/',
+  method => 'GET',
+  params => [],
+  required => [],
+);
+
+fbx_api_method connection_config_ftth => (
+  description => <<'',
+Connection settings for ftth.
+
+  path => 'connection/ftth/',
+  method => 'GET',
+  params => [],
+  required => [],
+);
+
+fbx_api_method connection_dyndns => (
+  description => <<'',
+Get status or config of dyndns provider.
+
+  path => 'connection/ddns/',
+  method => 'GET',
+  params => [qw/suff/],
+  required => [qw/suff/],
+);
+
+#LAN
+fbx_api_method get_lan_config => (
+  description => <<'',
+Get the current Lan configuration.
+
+  path => 'lan/config/',
+  method => 'GET',
+  params => [],
+  required => [],
+);
+
+fbx_api_method browse_lan_interface => (
+  description => <<'',
+Gett the list of browsable LAN interfaces.
+
+  path => 'lan/browser/interfaces/',
+  method => 'GET',
+  params => [],
+  required => [],
+);
+
+fbx_api_method list_hosts => (
+  description => <<'',
+Gett the list of hosts on a given interface.
+
+  path => 'lan/browser/',
+  method => 'GET',
+  params => [ qw/suff/ ],
+  required => [ qw/suff/ ],
+);
+
 
 1;
 __END__
