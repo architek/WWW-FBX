@@ -1,3 +1,7 @@
+<div>
+    <a href="https://travis-ci.org/architek/WWW-FBX"><img src="https://travis-ci.org/architek/WWW-FBX.svg?branch=master"></a>
+</div>
+
 # NAME
 
 WWW::FBX - A perl interface to the Freebox v6 Rest API

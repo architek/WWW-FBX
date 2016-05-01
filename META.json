@@ -52,5 +52,16 @@
       }
    },
    "release_status" : "unstable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/architek/WWW-FBX/issues"
+      },
+      "homepage" : "https://github.com/architek/WWW-FBX",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/architek/WWW-FBX.git",
+         "web" : "https://github.com/architek/WWW-FBX"
+      }
+   },
    "version" : "0.1"
 }
