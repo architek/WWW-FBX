@@ -16,37 +16,19 @@ with 'WWW::FBX::Role::Auth';
  
 use namespace::autoclean;
 
-my $fixed_version="1.0";
 our $VERSION="0.1";
 
-has lwp_args        => ( isa => 'HashRef', is => 'ro', default => sub { {} } );
-has username        => ( isa => 'Str', is => 'rw', predicate => 'has_username' );
-has password        => ( isa => 'Str', is => 'rw', predicate => 'has_password' );
-has ua              => ( isa => 'LWP::UserAgent', is => 'rw', lazy => 1, builder => '_build_ua' );
-has uar             => ( isa => 'HashRef', is => 'rw' );
-has clientname      => ( isa => 'Str', is => 'ro', default => 'Perl WWW::FBX' );
-has clientver       => ( isa => 'Str', is => 'ro', default => $fixed_version );
+has lwp_args    => ( isa => 'HashRef', is => 'ro', default => sub { {} } );
+has ua          => ( isa => 'LWP::UserAgent', is => 'rw', lazy => 1, builder => '_build_ua' );
+has uar         => ( isa => 'HashRef', is => 'rw' );
+has [ qw/app_id app_name app_version device_name/ ] => ( 
+    isa => 'Str', is => 'ro', required => 1 );
 
 has _json_handler   => (
     is      => 'rw',
     default => sub { JSON->new->allow_nonref },
     handles => { from_json => 'decode' },
 );
- 
-sub _natural_args {
-    my ( $self, $args ) = @_;
- 
-    map { $_ => $args->{$_} } grep !/^-/, keys %$args;
-}
- 
-around BUILDARGS => sub {
-    my $next    = shift;
-    my $class   = shift;
- 
-    my %options = @_ == 1 ? %{$_[0]} : @_;
- 
-    return $next->($class, \%options);
-};
  
 sub _build_ua {
     my $self = shift;
@@ -56,22 +38,13 @@ sub _build_ua {
     return $ua;
 }
  
-sub _encode_args {
-    my ($self, $args) = @_;
- 
-    # Values need to be utf-8 encoded.  Because of a perl bug, exposed when
-    # client code does "use utf8", keys must also be encoded.
-    # see: http://www.perlmonks.org/?node_id=668987
-    # and: http://perl5.git.perl.org/perl.git/commit/eaf7a4d2
-    return { map { utf8::upgrade($_) unless ref($_); $_ } %$args };
-}
- 
 sub _json_request {
     my ($self, $http_method, $uri, $args, $content_type ) = @_;
  
     my $msg = $self->_prepare_request($http_method, $uri, $args, $content_type);
     my $res = $self->_send_request($msg);
 
+    #Store response
     $self->uar( $self->_parse_result ($res, $args ) );
 
     return $self->uar;
@@ -82,25 +55,22 @@ sub _prepare_request {
  
     my $msg;
  
-    my %natural_args = $self->_natural_args($args);
- 
-    $self->_encode_args(\%natural_args);
     if( $http_method eq 'PUT' ) {
         $msg = PUT(
             $uri,
             'Content-Type' => 'application/x-www-form-urlencoded',
-            Content        => $self->_query_string_for( \%natural_args ) );
+            Content        => $self->_query_string_for( $args ) );
     }
     elsif ( $http_method =~ /^(?:GET|DELETE)$/ ) {
-        $uri->query($self->_query_string_for(\%natural_args));
+        $uri->query($self->_query_string_for($args));
         $msg = HTTP::Request->new($http_method, $uri);
     }
     elsif ( $http_method eq 'POST' ) {
-        if( $content_type && $content_type eq 'application/json' ) {
-            $msg = POST( $uri,  Content_Type => 'application/json', Content =>  encode_json \%natural_args );
+        if( !$content_type || $content_type eq 'application/json' ) {
+            $msg = POST( $uri,  Content_Type => 'application/json', Content =>  encode_json $args );
         }
         else {
-            die;
+            die "Not handled $content_type ";
         }
     }
     else {
@@ -110,14 +80,12 @@ sub _prepare_request {
     return $msg;
 }
  
-# Make sure we encode arguments *exactly* the same way Net::OAuth does
-# ...by letting Net::OAuth encode them.
 sub _query_string_for {
     my ( $self, $args ) = @_;
 
     my @pairs;
     while ( my ($k, $v) = each %$args ) {
-        push @pairs, join '=', map URI::Escape::uri_escape_utf8($_,'^\w.~-'), $k, $v;
+        push @pairs, join '=', $k, $v;
     }
 
     return join '&', @pairs;
@@ -156,15 +124,67 @@ __END__
 
 =head1 NAME
 
-WWW::FBX - It's new $module
+WWW::FBX - A perl interface to the Freebox v6 Rest API
+
+=head1 FREEBOX SDK API 3.0
+
+This version provides the API 3.0 support through the APIv3 role but other version can be provided by creating a new role.
+
+=head1 AUTHENTICATION
+
+Authentication is provided through the Auth role but other authentication mechanism can be provided by creating a new role.
 
 =head1 SYNOPSIS
 
     use WWW::FBX;
+    use Scalar::Util 'blessed';
+
+    my $res;
+    eval { 
+        my $fbx = WWW::FBX->new( 
+            app_id => "APP ID", 
+            app_name => "APP NAME", 
+            app_version => "1.0", 
+            device_name => "debian", 
+            track_id => "48", 
+            app_token => "2/g43EZYD8AO7tbnwwhmMxMuELtTCyQrV1goMgaepHWGrqWlloWmMRszCuiN2ftp",
+        );
+        print "You are now authenticated with track_id ", $fbx->track_id, " and app_token ", $fbx->app_token, "\n"; 
+        print "App permissions are:\n";
+        while ( my( $key, $value ) = each %{ $fbx->uar->{result}{permissions} } ) {
+            print "\t $key\n" if $value;
+        }
+
+        $res = $fbx->connection;
+        print "Your ", $res->{result}{media}, " internet connection state is ", $res->{result}{state}, "\n";
+    };
+
+    if ( my $err = $@ ) {
+        die $@ unless blessed $err && $err->isa('WWW::FBX::Error');
+ 
+        warn "HTTP Response Code: ", $err->code, "\n",
+             "HTTP Message......: ", $err->message, "\n",
+             "API Error.........: ", $err->error, "\n",
+             "Error Code........: ", $err->fbx_error_code, "\n",
+    }
 
 =head1 DESCRIPTION
 
-WWW::FBX is FBX core
+This module provides a perl interface to the freebox v6 APIs. See L<http://dev.freebox.fr/sdk/os/> for a full description of the APIs.
+
+=head1 METHODS AND ARGUMENTS
+
+Mandatory constructor parameters are app_id, app_name, app_version, device_name.
+
+When track_id and app_token are also provided, they will be used to authenticate.
+Otherwise, new track_id and app_token will be given by the freebox. These can be then used for later access.
+Note that adding the settings permission is only possible through the web interface (Paramètres de la Freebox -> Gestion des accès -> Applications)
+
+The constructor takes care of detecting the API version and authentication.
+
+Return values are perl hashes.
+
+The same response is also available through the uar method.
 
 =head1 LICENSE
 

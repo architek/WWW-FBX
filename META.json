@@ -1,5 +1,5 @@
 {
-   "abstract" : "It's new $module",
+   "abstract" : "A perl interface to the Freebox v6 Rest API",
    "author" : [
       "Laurent Kislaire <teebeenator@gmail.com>"
    ],

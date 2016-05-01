@@ -3,9 +3,9 @@ use 5.008001;
 use Moose::Role;
 use WWW::FBX::API;
 
-sub BUILD {
-  shift->api_version;
-}
+#sub BUILD {
+#  shift->api_version;
+#}
 
 fbx_api_method api_version => (
   description => <<'',
@@ -17,20 +17,36 @@ Get API version.
   required => [],
 );
 
-after api_version => sub {
-  my $uar = shift->uar;
+around api_version => sub {
+  my $orig = shift;
+  my $self = shift;
+  
+  api_url( "" );
+  $self->$orig;
+  my $uar = $self->uar;
   my ($maj) = $uar->{api_version} =~ /(\d*)\./;
   api_url( "$uar->{api_base_url}v$maj" );
 };
+
+fbx_api_method req_auth => (
+  description => <<'',
+Ask for an App token.
+
+  path => 'login/authorize',
+  method => 'POST',
+  params => [qw/ app_id app_name app_version device_name /],
+  required => [qw/ app_id app_name app_version device_name /],
+
+);
 
 fbx_api_method auth_progress => (
   description => <<'',
 Monitor token status.
 
-  path => 'login/authorize/42',
+  path => 'login/authorize/',
   method => 'GET',
-  params => [],
-  required => [],
+  params => [qw/suff/],
+  required => [qw/suff/],
 );
 
 fbx_api_method login => (
@@ -41,6 +57,16 @@ Get login challenge.
   method => 'GET',
   params => [],
   required => [],
+);
+
+fbx_api_method open_session => (
+  description => <<'',
+Open a session.
+
+  path => 'login/session/',
+  method => 'POST',
+  params => [ qw/ app_id app_version password / ],
+  required => [ qw/ app_id password / ],
 );
 
 fbx_api_method connection => (

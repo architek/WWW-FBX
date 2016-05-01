@@ -9,11 +9,8 @@ use namespace::autoclean;
 
 Moose::Exporter->setup_import_methods(
     with_caller => [ qw/api_url base_url fbx_api_method/ ],
-#    also => 'Moose',
 );
 
-#has base_url        => ( isa => 'Str', is => 'rw', default => "http://mafreebox.free.fr");
-#has api_url         => ( isa => 'Str', is => 'rw', default => "");
 my ($_api_url, $_base_url) = ( "", "http://mafreebox.free.fr" );
 
 sub api_url { $_api_url = $_[1]; }
@@ -37,11 +34,6 @@ sub fbx_api_method {
         # copy callers args since we may add ->{source}
         my $args = ref $_[-1] eq 'HASH' ? { %{pop @_} } : {};
  
-        # flatten array arguments
-        for ( qw/id user_id screen_name/ ) {
-            $args->{$_} = join ',' => @{ $args->{$_} } if ref $args->{$_} eq 'ARRAY';
-        }
- 
         croak sprintf "$name expected %d args", scalar @$arg_names if @_ > @$arg_names;
  
         # promote positional args to named args
@@ -63,10 +55,11 @@ sub fbx_api_method {
  
         # replace placeholder arguments
         my $local_path = $path;
-        $local_path =~ s,/:id$,, unless exists $args->{id}; # remove optional trailing id
         $local_path =~ s/:(\w+)/delete $args->{$1} or croak "required arg '$1' missing"/eg;
+        $local_path .= $args->{suff} if exists $args->{suff};
 
         my $uri = URI->new($_base_url . $_api_url . "/$local_path");
+
         return $self->_json_request(
             $options{method},
             $uri,
@@ -74,7 +67,6 @@ sub fbx_api_method {
             $options{content_type}
         );
     };
-
     #Add method with name and Class::MOP::Method
     $class->add_method(
         $name,
@@ -102,7 +94,8 @@ has params          => ( isa => 'ArrayRef[Str]', is => 'ro', default => sub { []
 has required        => ( isa => 'ArrayRef[Str]', is => 'ro', default => sub { [] } );
 has returns         => ( isa => 'Str', is => 'ro', predicate => 'has_returns' );
 has booleans        => ( isa => 'ArrayRef[Str]', is => 'ro', default => sub { [] } );
-has content_type     => ( isa => 'Str', is => 'ro', default => '' );
+has content_type    => ( isa => 'Str', is => 'ro', default => '' );
+has suff            => ( isa => 'Str', is => 'ro', default => '' );
  
 #Build hash where keys are attribute names
 my %valid_attribute_names = map { $_->init_arg => 1 }

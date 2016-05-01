@@ -3,27 +3,25 @@ use strict;
 use warnings;
 use WWW::FBX;
 use Scalar::Util 'blessed';
+
 my $res;
+eval { 
+  my $fbx = WWW::FBX->new( 
+    app_id => "APP ID", 
+    app_name => "APP NAME",
+    app_version => "1.0",
+    device_name => "debian",
+    track_id => "48",
+    app_token => "2/g43EZYD8AO7tbnwwhmMxMuELtTCyQrV1goMgaepHWGrqWlloWmMRszCuiN2ftp",
+  );
+  print "You are now authenticated with track_id ", $fbx->track_id, " and app_token ", $fbx->app_token, "\n";
+  print "App permissions are:\n";
+  while ( my( $key, $value ) = each %{ $fbx->uar->{result}{permissions} } ) {
+    print "\t $key\n" if $value;
+  }
 
-use Data::Dumper;
-
-my $fbx = WWW::FBX->new(
-  appid => "APP ID", 
-  appname => "APP NAME",
-  traits => [qw/API::APIv3/],
-);
-
-#$res=$fbx->api_version;
-#warn Dumper $res;
-
-#$res=$fbx->auth_progress;
-#warn Dumper $res;
-
-#$res=$fbx->login;
-#warn Dumper $res;
-
-eval {
-  $res=$fbx->connection;
+  $res = $fbx->connection;
+  print "Your ", $res->{result}{media}, " internet connection state is ", $res->{result}{state}, "\n";
 };
 
 if ( my $err = $@ ) {
@@ -32,4 +30,5 @@ if ( my $err = $@ ) {
     warn "HTTP Response Code: ", $err->code, "\n",
          "HTTP Message......: ", $err->message, "\n",
          "API Error.........: ", $err->error, "\n",
+         "Error Code........: ", $err->fbx_error_code, "\n",
 }
