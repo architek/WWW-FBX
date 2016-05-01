@@ -73,7 +73,7 @@ __END__
 
 =head1 NAME
 
-WWW::FBX::Error - It's new $module
+WWW::FBX::Error - Freebox Error Handling
 
 =head1 SYNOPSIS
 

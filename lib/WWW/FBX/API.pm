@@ -120,7 +120,7 @@ __END__
 
 =head1 NAME
 
-WWW::FBX::API - It's new $module
+WWW::FBX::API - Freebox API sugar
 
 =head1 SYNOPSIS
 
