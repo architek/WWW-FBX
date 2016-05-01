@@ -143,7 +143,7 @@ Get the current Lan configuration.
 
 fbx_api_method browse_lan_interface => (
   description => <<'',
-Gett the list of browsable LAN interfaces.
+Get the list of browsable LAN interfaces.
 
   path => 'lan/browser/interfaces/',
   method => 'GET',
@@ -153,12 +153,34 @@ Gett the list of browsable LAN interfaces.
 
 fbx_api_method list_hosts => (
   description => <<'',
-Gett the list of hosts on a given interface.
+Get the list of hosts on a given interface.
 
   path => 'lan/browser/',
   method => 'GET',
   params => [ qw/suff/ ],
   required => [ qw/suff/ ],
+);
+
+#FTP
+
+fbx_api_method ftp_config => (
+  description => <<'',
+Get the FTP config.
+
+  path => 'ftp/config/',
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+);
+
+fbx_api_method set_ftp_config => (
+  description => <<'',
+Set the FTP config.
+
+  path => 'ftp/config',
+  method => 'PUT',
+  params => [ qw/enabled allow_anonymous allow_anonymous_write password/ ],
+  required => [ ],
 );
 
 
