@@ -1,6 +1,9 @@
 Revision history for Perl extension WWW-FBX
 
 {{$NEXT}}
+    - more tests. most of tests need a freebox and setting ENV variables FBX_APP_ID FBX_APP_NAME FBX_APP_VERSION FBX_TRACK_ID FBX_APP_TOKEN
+    - updated APIv3: correction and using for loops
+    - fbx-test.pl is now provided without any default id
 
 0.03 2016-05-01T21:12:14Z
     - quick GETters all done
