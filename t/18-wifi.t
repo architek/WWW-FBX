@@ -8,7 +8,7 @@ plan skip_all => "FBX_APP_ID, FBX_APP_NAME, FBX_APP_VERSION, FBX_TRACK_ID, FBX_A
 my $fbx;
 
 eval { 
-  $fbx = WWW::FBX->new (
+  $fbx = WWW::FBX->new ( 
     app_id => $ENV{FBX_APP_ID},
     app_name => $ENV{FBX_APP_NAME},
     app_version => $ENV{FBX_APP_VERSION},
@@ -16,7 +16,13 @@ eval {
     track_id => $ENV{FBX_TRACK_ID},
     app_token => $ENV{FBX_APP_TOKEN},
   );
-isa_ok $fbx, "WWW::FBX", "WWW::FBX->new";
+  
+  isa_ok $fbx, "WWW::FBX", "wifi";
+  ok($fbx->wifi_config, "wifi config");
+  ok($fbx->wifi_ap, "wifi ap");
+  ok($fbx->wifi_bss, "wifi bss");
+  ok($fbx->wifi_planning, "wifi planning");
+  ok($fbx->wifi_mac_filter, "wifi mac filter");
 };
 
 if ( my $err = $@ ) {

@@ -2,13 +2,14 @@ use strict;
 use Test::More 0.98;
 use WWW::FBX;
 
+
 plan skip_all => "FBX_APP_ID, FBX_APP_NAME, FBX_APP_VERSION, FBX_TRACK_ID, FBX_APP_TOKEN not all set" 
     unless $ENV{FBX_APP_ID} and $ENV{FBX_APP_NAME} and $ENV{FBX_APP_VERSION} and $ENV{FBX_TRACK_ID} and $ENV{FBX_APP_TOKEN};
 
 my $fbx;
 
 eval { 
-  $fbx = WWW::FBX->new (
+  $fbx = WWW::FBX->new ( 
     app_id => $ENV{FBX_APP_ID},
     app_name => $ENV{FBX_APP_NAME},
     app_version => $ENV{FBX_APP_VERSION},
@@ -16,7 +17,11 @@ eval {
     track_id => $ENV{FBX_TRACK_ID},
     app_token => $ENV{FBX_APP_TOKEN},
   );
-isa_ok $fbx, "WWW::FBX", "WWW::FBX->new";
+  
+  isa_ok $fbx, "WWW::FBX", "parental";
+  plan skip_all => "No permission for parental config access" unless $fbx->uar->{result}{permissions}{parental};
+  ok($fbx->parental_config, "parental config");
+  ok($fbx->parental_filter, "parental filter");
 };
 
 if ( my $err = $@ ) {

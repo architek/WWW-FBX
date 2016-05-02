@@ -89,7 +89,7 @@ Global download feed getters.
   method => 'GET',
   params => [ ],
   required => [ ],
-) for qw(downloads/feeds/ downloads/feeds/);
+) for qw(downloads/feeds/);
 
 #Download config
 fbx_api_method s'/'_'gr => (
@@ -124,7 +124,7 @@ Global share getters.
   required => [ ],
 ) for qw(share_link/);
 
-#Share
+#Upload
 fbx_api_method s'/'_'gr => (
   description => <<'',
 Global upload getters.
@@ -170,56 +170,16 @@ Global contacts getters.
   required => [ ],
 ) for qw(contact/);
 
-#Connection
-fbx_api_method connection => (
+#CONNECTION
+fbx_api_method s'/'_'gr => (
   description => <<'',
-Connection status.
+Global Connection getters.
 
-  path => 'connection/',
+  path => $_,
   method => 'GET',
   params => [],
   required => [],
-);
-
-fbx_api_method connection_config => (
-  description => <<'',
-Connection settings.
-
-  path => 'connection/config/',
-  method => 'GET',
-  params => [],
-  required => [],
-);
-
-fbx_api_method connection_config_ipv6 => (
-  description => <<'',
-Connection settings for IPV6.
-
-  path => 'connection/ipv6/config/',
-  method => 'GET',
-  params => [],
-  required => [],
-);
-
-fbx_api_method connection_config_xdsl => (
-  description => <<'',
-Connection settings for xdsl.
-
-  path => 'connection/xdsl/',
-  method => 'GET',
-  params => [],
-  required => [],
-);
-
-fbx_api_method connection_config_ftth => (
-  description => <<'',
-Connection settings for ftth.
-
-  path => 'connection/ftth/',
-  method => 'GET',
-  params => [],
-  required => [],
-);
+) for qw(connection connection/config connection/ipv6/config connection/xdsl/ connection/ftth);
 
 fbx_api_method connection_dyndns => (
   description => <<'',
@@ -232,25 +192,15 @@ Get status or config of dyndns provider.
 );
 
 #LAN
-fbx_api_method get_lan_config => (
+fbx_api_method s'/'_'gr => (
   description => <<'',
-Get the current Lan configuration.
+Global Lan getters.
 
-  path => 'lan/config/',
+  path => $_,
   method => 'GET',
   params => [],
   required => [],
-);
-
-fbx_api_method browse_lan_interface => (
-  description => <<'',
-Get the list of browsable LAN interfaces.
-
-  path => 'lan/browser/interfaces/',
-  method => 'GET',
-  params => [],
-  required => [],
-);
+) for qw(lan/config lan/browser/interfaces);
 
 fbx_api_method list_hosts => (
   description => <<'',
