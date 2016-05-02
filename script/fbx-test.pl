@@ -11,8 +11,9 @@ eval {
     app_name => "APP NAME",
     app_version => "1.0",
     device_name => "debian",
-    track_id => "48",
-    app_token => "2/g43EZYD8AO7tbnwwhmMxMuELtTCyQrV1goMgaepHWGrqWlloWmMRszCuiN2ftp",
+# Fill in track_id and app_token once they've been given by Freebox
+#    track_id => "48",
+#    app_token => "2/g43EZYD8AO7tbnwwhmMxMuELtTCyQrV1goMgaepHWGrqWlloWmMRszCuiN2ftp",
   );
   print "You are now authenticated with track_id ", $fbx->track_id, " and app_token ", $fbx->app_token, "\n";
   print "App permissions are:\n";
