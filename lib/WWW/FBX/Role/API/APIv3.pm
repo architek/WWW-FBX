@@ -519,8 +519,299 @@ WWW::FBX::Role::API::APIv3 - Freebox API v3
 
 WWW::FBX::Role::API::APIv3 is the freebox6 API version 3 as a Moose Role
 
-Current methods available:
-get_lan_config, upload, connection, connection_config, connection_config_ipv6, netshare_samba, fw_incoming, airmedia_receivers,  downloads_stats, wifi_config, wifi_mac_filter, fs_tasks, vpn_client_status, switch_sts, ftp_config, dhcp_config, parental_filter, fw_redir, fw_dmz, vpn_client_config, upnpav, connection_config_xdsl, vpn_client_log, connection_dyndns, parental_config, wifi_ap, vpn_ip_pool, upnpigd_redir, freeplugs_net, downloads, set_upnpav, api_version, storage_disk, contact, wifi_planning, wifi_bss, login, dhcp_dynamic_lease, system, list_hosts, airmedia_config, browse_lan_interface, set_ftp_config, vpn_user, auth_progress, storage_partition, reboot, downloads_config, open_session, reset_freeplug, vpn, share_link, set_lcd, call_log, dhcp_static_lease, lcd, upnpigd_config, netshare_afp, downloads_feeds, connection_config_ftth
+=head1 API
+
+=head2 call
+
+=head3 call log
+
+my $res = $fbx->call_log;
+
+=head3 contact
+
+my $res = $fbx->contact;
+
+=head2 connection
+
+=head3 connection
+
+my $res = $fbx->connection;
+
+=head3 connection config
+
+my $res = $fbx->connection_config;
+
+=head3 connection ipv6 config
+
+my $res = $fbx->connection_ipv6_config;
+
+=head3 connection xdsl
+
+my $res = $fbx->connection_xdsl;
+
+=head3 connection ftth
+
+my $res = $fbx->connection_ftth;
+
+=head3 connection dyndns noip
+
+my $res = $fbx->connection_dyndns({suff=>"noip/status"});
+
+=head2 dhcp
+
+=head3 dhcp config
+
+my $res = $fbx->dhcp_config;
+
+=head3 dhcp static lease
+
+my $res = $fbx->dhcp_static_lease;
+
+=head3 dhcp dynamic lease
+
+my $res = $fbx->dhcp_dynamic_lease;
+
+=head2 download
+
+=head3 downloads
+
+my $res = $fbx->downloads;
+
+=head3 download task
+
+my $res = $fbx->get_download_task( { suff => "0" } );
+
+=head3 download task log
+
+my $res = $fbx->get_download_task( { suff => "0/log" } );
+
+=head3 downloads task del
+
+my $res = $fbx->del_download_task( { suff => "0" } );
+
+=head3 downloads task del with file erase
+
+my $res = $fbx->del_download_task( { suff => "0/erase" } );
+
+=head3 downloads update
+
+my $res = $fbx->upd_download_task( { suff => "0", io_priority => "high" } );
+
+=head3 download add
+
+my $res = $res = $fbx->add_download_task( { download_url => "http://cdimage.debian.org/debian-cd/current/arm64/bt-cd/debian-8.4.0-arm64-CD-1.iso.torrent"} );
+
+=head3 download add by local file
+
+my $res = $res=$fbx->add_download_task_file( {download_file => [ "debian-8.4.0-arm64-netinst.iso.torrent" ] });
+
+=head3 update priority of download file
+
+my $res = $res=$fbx->change_prio_download_file( {suff=>"76/files/76-0", priority=>"high"} );
+
+=head3 download tracker
+
+my $res = $res = $fbx->get_download_task( {suff => "76/trackers"});
+
+=head3 download peers
+
+my $res = $res = $fbx->get_download_task( {suff => "76/peers"});
+
+=head3 downloads stats
+
+my $res = $fbx->downloads_stats;
+
+=head3 downloads feeds
+
+my $res = $fbx->downloads_feeds;
+
+=head3 add feed
+
+my $res = $res = $fbx->add_feed({url=>"http://www.nzb-rss.com/rss/Debian-unstable.rss"});
+
+=head3 downloads config
+
+my $res = $fbx->downloads_config;
+
+=head2 freeplugs
+
+=head3 freeplugs_net
+
+my $res = $fbx->freeplugs_net;
+
+=head2 fs
+
+=head3 fs tasks
+
+my $res = $fbx->fs_tasks;
+
+=head2 ftp
+
+=head3 ftp config
+
+my $res = $fbx->ftp_config;
+
+=head2 lan
+
+=head3 lan config
+
+my $res = $fbx->lan_config;
+
+=head3 lan browser interfaces
+
+my $res = $res = $fbx->lan_browser_interfaces;
+
+=head3 lan browser interfaces pub
+
+my $res = $fbx->list_hosts({ suff => $res->{result}->[0]->{name} });
+
+=head2 lcd
+
+=head3 lcd
+
+my $res = $res = $fbx->lcd;
+
+=head3 lcd brightness back
+
+my $res = $fbx->set_lcd({ brightness => $res->{result}{brightness} });
+
+=head2 nat
+
+=head3 fw dmz
+
+my $res = $fbx->fw_dmz;
+
+=head3 fw redir
+
+my $res = $fbx->fw_redir;
+
+=head3 fw incoming
+
+my $res = $fbx->fw_incoming;
+
+=head2 parental
+
+=head3 parental config
+
+my $res = $fbx->parental_config;
+
+=head3 parental filter
+
+my $res = $fbx->parental_filter;
+
+=head2 share
+
+=head3 share link
+
+my $res = $fbx->share_link;
+
+=head3 upload
+
+my $res = $fbx->upload;
+
+=head3 airmedia config
+
+my $res = $fbx->airmedia_config;
+
+=head3 airmedia receivers
+
+my $res = $fbx->airmedia_receivers;
+
+=head2 shares
+
+=head3 netshare samba
+
+my $res = $fbx->netshare_samba;
+
+=head3 netshare afp
+
+my $res = $fbx->netshare_afp;
+
+=head2 storage
+
+=head3 storage disk
+
+my $res = $fbx->storage_disk;
+
+=head3 storage partition
+
+my $res = $fbx->storage_partition;
+
+=head2 switch
+
+=head3 switch status
+
+my $res = $fbx->switch_sts;
+
+=head2 system
+
+=head3 system
+
+my $res = $fbx->system;
+
+=head2 upnp
+
+=head3 upnpigd config
+
+my $res = $fbx->upnpigd_config;
+
+=head3 upnpigd redir
+
+my $res = $fbx->upnpigd_redir;
+
+=head2 upnpav
+
+=head3 upnpav
+
+my $res = $fbx->upnpav;
+
+=head2 vpn
+
+=head3 vpn
+
+my $res = $fbx->vpn;
+
+=head3 vpn user
+
+my $res = $fbx->vpn_user;
+
+=head3 vpn ip_pool
+
+my $res = $fbx->vpn_ip_pool;
+
+=head3 vpn client config
+
+my $res = $fbx->vpn_client_config;
+
+=head3 vpn client status
+
+my $res = $fbx->vpn_client_status;
+
+=head3 vpn client log
+
+my $res = $fbx->vpn_client_log;
+
+=head2 wifi
+
+=head3 wifi config
+
+my $res = $fbx->wifi_config;
+
+=head3 wifi ap
+
+my $res = $fbx->wifi_ap;
+
+=head3 wifi bss
+
+my $res = $fbx->wifi_bss;
+
+=head3 wifi planning
+
+my $res = $fbx->wifi_planning;
+
+=head3 wifi mac filter
+
+my $res = $fbx->wifi_mac_filter;
 
 =head1 LICENSE
 
