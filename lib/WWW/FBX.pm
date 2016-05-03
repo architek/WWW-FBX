@@ -15,7 +15,7 @@ with 'WWW::FBX::Role::Auth';
  
 use namespace::autoclean;
 
-our $VERSION="0.04";
+our $VERSION="0.05";
 
 has lwp_args    => ( isa => 'HashRef', is => 'ro', default => sub { {} } );
 has ua          => ( isa => 'LWP::UserAgent', is => 'rw', lazy => 1, builder => '_build_ua' );
