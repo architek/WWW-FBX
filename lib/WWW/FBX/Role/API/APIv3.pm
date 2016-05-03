@@ -80,16 +80,91 @@ Global download getters.
   required => [ ],
 ) for qw(downloads/ downloads/stats);
 
+fbx_api_method get_download_task => (
+  description => <<'',
+Get the download task.
+
+  path => 'downloads/',
+  method => 'GET',
+  params => [ qw/suff/ ],
+  required => [ qw/suff/ ],
+);
+
+fbx_api_method del_download_task => (
+  description => <<'',
+Get the download task.
+
+  path => 'downloads/',
+  method => 'DELETE',
+  params => [ qw/suff/ ],
+  required => [ qw/suff/ ],
+);
+
+fbx_api_method upd_download_task => (
+  description => <<'',
+Update the download task.
+
+  path => 'downloads/',
+  method => 'PUT',
+  params => [ qw/suff io_prority status/ ],
+  required => [ qw/suff/ ],
+);
+
+fbx_api_method add_download_task => (
+  description => <<'',
+Add a download task.
+
+  path => 'downloads/add',
+  method => 'POST',
+  content_type => 'application/x-www-form-urlencoded',
+  params => [ qw/download_url download_url_list download_dir recursive username password archive_password cookies/],
+  required => [ qw//],
+);
+
+fbx_api_method add_download_task_file => (
+  description => <<'',
+Add a download task by file.
+
+  path => 'downloads/add',
+  method => 'POST',
+  content_type => 'form-data',
+  params => [ qw/download_file download_dir archive_password/],
+  required => [ qw/download_file/],
+);
+
+fbx_api_method change_prio_download_file => (
+  description => <<'',
+Change the priority of a Download File.
+
+  path => 'downloads/',
+  method => 'PUT',
+  params => [ qw/suff prority/ ],
+  required => [ qw/suff prority/ ],
+);
+
+#TODO: tracker, blacklist
+
 #Download feeds
 fbx_api_method s'/'_'gr => (
   description => <<'',
-Global download feed getters.
+Get feed(s).
 
   path => $_,
   method => 'GET',
-  params => [ ],
+  params => [ qw/suff/ ],
   required => [ ],
 ) for qw(downloads/feeds/);
+
+fbx_api_method add_feed => (
+  description => <<'',
+Add a feed.
+
+  path => 'downloads/feeds/',
+  method => 'POST',
+  params => [ qw/url/ ],
+  required => [ qw/url/ ],
+);
+#TODO the rest..
 
 #Download config
 fbx_api_method s'/'_'gr => (
