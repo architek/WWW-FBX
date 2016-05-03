@@ -7,6 +7,8 @@ plan skip_all => "FBX_APP_ID, FBX_APP_NAME, FBX_APP_VERSION, FBX_TRACK_ID, FBX_A
 
 my $fbx;
 
+diag "Sleeping 1s to avoid 503 error on invalid token" && sleep 1;
+
 eval { 
   $fbx = WWW::FBX->new ( 
     app_id => $ENV{FBX_APP_ID},
