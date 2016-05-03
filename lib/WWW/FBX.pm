@@ -62,11 +62,15 @@ sub _prepare_request {
         $msg = HTTP::Request->new($http_method, $uri);
     }
     elsif ( $http_method eq 'POST' ) {
-        if( !$content_type || $content_type eq 'application/json' ) {
+        if( !$content_type or $content_type eq 'application/json' ) {
             $msg = POST( $uri,  Content_Type => 'application/json', Content =>  encode_json $args );
         }
+        elsif ( $content_type eq "form-data" ) {
+            print "$http_method : $uri\n";
+            $msg = POST($uri, Content_Type => 'form-data', Content => [ map { ref $_ ? $_ : encode_utf8 $_ } %$args ]);
+        }
         else {
-            die "Not handled $content_type ";
+            $msg = POST($uri, Content => $args);
         }
     }
     else {
