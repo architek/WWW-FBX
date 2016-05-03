@@ -1,6 +1,8 @@
 Revision history for Perl extension WWW-FBX
 
 {{$NEXT}}
+
+0.05 2016-05-03T22:32:44Z
     - Handle form-data
     - More download API and tests
     - Document available services in APIv3
