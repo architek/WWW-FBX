@@ -1,6 +1,9 @@
 Revision history for Perl extension WWW-FBX
 
 {{$NEXT}}
+    - Handle form-data
+    - More download API and tests
+    - Document available services in APIv3
 
 0.04 2016-05-02T21:10:40Z
     - more tests. most of tests need a freebox and setting ENV variables FBX_APP_ID FBX_APP_NAME FBX_APP_VERSION FBX_TRACK_ID FBX_APP_TOKEN
@@ -15,6 +18,5 @@ Revision history for Perl extension WWW-FBX
     - added build requirements
 
 0.01 2016-05-01T16:36:29Z
-
     - original version
 
