@@ -1,6 +1,10 @@
 Revision history for Perl extension WWW-FBX
 
 {{$NEXT}}
+    - Download API done
+    - Feeds API done
+    - More FS API
+    - Adapted to handle non JSON response from download file service
 
 0.05 2016-05-03T22:32:44Z
     - Handle form-data
