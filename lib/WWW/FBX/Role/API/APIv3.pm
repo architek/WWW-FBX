@@ -164,7 +164,46 @@ Add a feed.
   params => [ qw/url/ ],
   required => [ qw/url/ ],
 );
-#TODO the rest..
+
+fbx_api_method del_feed => (
+  description => <<'',
+Delete download feed.
+
+  path => "downloads/feeds/",
+  method => 'DELETE',
+  params => [ qw/suff/ ],
+  required => [ qw/suff/ ],
+);
+
+fbx_api_method upd_feed => (
+  description => <<'',
+Update download feed.
+
+  path => 'downloads/feeds/',
+  method => 'PUT',
+  params => [ qw/suff/ ],
+  required => [ qw/suff/ ],
+);
+
+fbx_api_method $_ => (
+  description => <<'',
+Global feed POST.
+
+  path => 'downloads/feeds/',
+  method => 'POST',
+  params => [ qw/suff/ ],
+  required => [ qw/suff/ ],
+) for qw/refresh_feed download_feed_itm mark_all_read/;
+
+fbx_api_method refresh_feeds => (
+  description => <<'',
+Refresh all feeds.
+
+  path => 'downloads/feeds/fetch',
+  method => 'POST',
+  params => [ ],
+  required => [ ],
+);
 
 #Download config
 fbx_api_method s'/'_'gr => (

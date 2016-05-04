@@ -31,7 +31,16 @@ eval {
 #  ok($res = $fbx->get_download_task( {suff => "76/trackers"}), "download tracker");
 #  ok($res = $fbx->get_download_task( {suff => "76/peers"}), "download peers");
   ok($fbx->downloads_stats, "downloads stats");
-  ok($fbx->downloads_feeds, "downloads feeds");
+  ok($fbx->downloads_feeds, "download feeds");
+#  ok($fbx->downloads_feeds( { suff => "1"}, "download feed");
+#  ok($fbx->del_feed({suff => "1"}), "del feed");
+#  ok($fbx->upd_feed({suff=>"1", auto_download=> \1}), "update feed");
+#  ok($fbx->refresh_feed({suff=>"1/fetch"}), "refresh feed");
+#  ok($fbx->refresh_feeds, "refresh all feeds");
+#  ok($fbx->downloads_feeds({suff=>"1/items"}, "download feed items");
+#  ok($fbx->upd_feed({suff=>"1/items/6"}, "update a feed item");
+#  ok($fbx->download_feed_item({suff=>"1/items/6/download"}, "download a feed item");
+#  ok($fbx->mark_all_read({suff=>"1/items/mark_all_as_read"}, "mark all items as read");
 #  ok($res = $fbx->add_feed({url=>"http://www.nzb-rss.com/rss/Debian-unstable.rss"}), "add feed");
   ok($fbx->downloads_config, "downloads config");
 };
