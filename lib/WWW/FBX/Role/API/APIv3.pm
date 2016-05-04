@@ -707,6 +707,9 @@ WWW::FBX::Role::API::APIv3 is the freebox6 API version 3 as a Moose Role
 
 =head1 API
 
+API documentation is given here: L<http://dev.freebox.fr/sdk/os/>
+The following methods are currently implemented in this library:
+
 =head2 call
 
 =head3 call log
@@ -807,13 +810,57 @@ my $res = $res = $fbx->get_download_task( {suff => "76/peers"});
 
 my $res = $fbx->downloads_stats;
 
-=head3 downloads feeds
+=head3 download feeds
 
 my $res = $fbx->downloads_feeds;
+
+=head3 download feed
+
+my $res = $fbx->downloads_feeds( { suff => "1"};
+
+=head3 del feed
+
+my $res = $fbx->del_feed({suff => "1"});
+
+=head3 update feed
+
+my $res = $fbx->upd_feed({suff=>"1", auto_download=> \1});
+
+=head3 refresh feed
+
+my $res = $fbx->refresh_feed({suff=>"1/fetch"});
+
+=head3 refresh all feeds
+
+my $res = $fbx->refresh_feeds;
+
+=head3 download feed items
+
+my $res = $fbx->downloads_feeds({suff=>"1/items"};
+
+=head3 update a feed item
+
+my $res = $fbx->upd_feed({suff=>"1/items/6"};
+
+=head3 download a feed item
+
+my $res = $fbx->download_feed_item({suff=>"1/items/6/download"};
+
+=head3 mark all items as read
+
+my $res = $fbx->mark_all_read({suff=>"1/items/mark_all_as_read"};
 
 =head3 add feed
 
 my $res = $res = $fbx->add_feed({url=>"http://www.nzb-rss.com/rss/Debian-unstable.rss"});
+
+=head3 update downloads config
+
+my $res = $res = $fbx->upd_downloads_config({max_downloading_tasks => 6, download_dir=>"/Disque dur/Téléchargements/"});
+
+=head3 update throttling
+
+my $res = $res = $fbx->upd_downloads_throttle({throttling => "schedule"});
 
 =head3 downloads config
 
@@ -830,6 +877,22 @@ my $res = $fbx->freeplugs_net;
 =head3 fs tasks
 
 my $res = $fbx->fs_tasks;
+
+=head3 fs task
+
+my $res = $fbx->fs_tasks({suff=>"12"});
+
+=head3 fs task
+
+my $res = $fbx->upd_task({suff=>"12", state=>"paused"});
+
+=head3 list files
+
+my $res = $fbx->list_files({suff=>"/Disque dur/Photos/"});
+
+=head3 file info
+
+my $res = $res = $fbx->file_info({suff=>"Disque dur/Photos/Sydney/DSCF4323.JPG"});
 
 =head2 ftp
 
