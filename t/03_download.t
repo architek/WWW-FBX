@@ -42,6 +42,8 @@ eval {
 #  ok($fbx->download_feed_item({suff=>"1/items/6/download"}, "download a feed item");
 #  ok($fbx->mark_all_read({suff=>"1/items/mark_all_as_read"}, "mark all items as read");
 #  ok($res = $fbx->add_feed({url=>"http://www.nzb-rss.com/rss/Debian-unstable.rss"}), "add feed");
+#  ok($res = $fbx->upd_downloads_config({max_downloading_tasks => 6, download_dir=>"/Disque dur/Téléchargements/"}), "update downloads config");
+#  ok($res = $fbx->upd_downloads_throttle({throttling => "schedule"}), "update throttling");
   ok($fbx->downloads_config, "downloads config");
 };
 

@@ -19,6 +19,11 @@ eval {
   
   isa_ok $fbx, "WWW::FBX", "fs";
   ok($fbx->fs_tasks, "fs tasks");
+#  ok($fbx->fs_tasks({suff=>"12"}), "fs task");
+#  ok($fbx->upd_task({suff=>"12", state=>"paused"}), "fs task");
+#  ok($fbx->list_files({suff=>"/Disque dur/Photos/"}), "list files");
+#  ok($res = $fbx->file_info({suff=>"Disque dur/Photos/Sydney/DSCF4323.JPG"}), "file info");
+#  ok($res = $fbx->download_file({suff=>"Disque dur/Photos/Sydney/DSCF4322.JPG"}), "download RAW file, not JSON!";
 };
 
 if ( my $err = $@ ) {
