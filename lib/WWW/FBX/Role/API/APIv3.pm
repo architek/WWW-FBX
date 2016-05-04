@@ -2,6 +2,7 @@ package WWW::FBX::Role::API::APIv3;
 use 5.008001;
 use Moose::Role;
 use WWW::FBX::API;
+use MIME::Base64 qw/encode_base64 decode_base64/;
 
 #sub BUILD {
 #  shift->api_version;
@@ -193,7 +194,7 @@ Global feed POST.
   method => 'POST',
   params => [ qw/suff/ ],
   required => [ qw/suff/ ],
-) for qw/refresh_feed download_feed_itm mark_all_read/;
+) for qw/refresh_feed download_feed_item mark_all_read/;
 
 fbx_api_method refresh_feeds => (
   description => <<'',
@@ -206,26 +207,172 @@ Refresh all feeds.
 );
 
 #Download config
-fbx_api_method s'/'_'gr => (
+fbx_api_method downloads_config => (
   description => <<'',
-Global download config getters.
+Get Downloads config.
 
-  path => $_,
+  path => "downloads/config",
   method => 'GET',
   params => [ ],
   required => [ ],
+);
+
+fbx_api_method upd_downloads_config => (
+  description => <<'',
+Update downloads config.
+
+  path => "downloads/config",
+  method => 'PUT',
+  params => [ qw/throttling max_downloading_tasks download_dir use_watch_dir watch_dir news bt feed/],
+  required => [ ],
 ) for qw(downloads/config/);
+
+around downloads_config => sub {
+  my $orig = shift;
+  my $self = shift;
+  
+  my $params = $self->$orig(@_);
+
+  for (qw/download_dir watch_dir/) { 
+    $params->{result}{$_} = decode_base64( $params->{result}{$_} ) if exists $params->{result}{$_} and $params->{result}{$_};
+  }
+
+  $params;
+};
+
+around upd_downloads_config => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  if (@_) {
+    my $params = $_[0];
+    for my $par (qw/download_dir watch_dir/) { 
+      $params->{$par} = encode_base64( $params->{$par}, "") if exists $params->{$par} and $params->{$par};
+    }
+  }
+
+  $self->$orig(@_);
+};
+
+fbx_api_method upd_downloads_throttle => (
+  description => <<'',
+Update download throttling.
+
+  path => "downloads/throttling",
+  method => 'PUT',
+  params => [ qw/throttling/],
+  required => [ qw/throttling/ ],
+);
 
 #FS
 fbx_api_method s'/'_'gr => (
   description => <<'',
-Global fs getters.
+Get task(s).
 
   path => $_,
   method => 'GET',
-  params => [ ],
+  params => [ qw/suff/ ],
   required => [ ],
 ) for qw(fs/tasks/);
+
+fbx_api_method del_task => (
+  description => <<'',
+Delete task.
+
+  path => "fs/tasks/",
+  method => 'DELETE',
+  params => [ qw/suff/ ],
+  required => [ ],
+);
+
+fbx_api_method upd_task => (
+  description => <<'',
+Update task.
+
+  path => "fs/tasks/",
+  method => 'PUT',
+  params => [ qw/suff state/ ],
+  required => [ qw/suff state/ ],
+);
+
+fbx_api_method list_files => (
+  description => <<'',
+List files.
+
+  path => "fs/ls/",
+  method => 'GET',
+  params => [ qw/suff / ],
+  required => [ qw/suff/ ],
+);
+
+around list_files => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  if (@_) {
+    my $params = $_[0];
+    $params->{suff} = encode_base64( $params->{suff}, "") if exists $params->{suff} and $params->{suff};
+  }
+
+  my $res = $self->$orig(@_);
+  for my $i ( 0.. $#{$res->{result}} ) {
+    $res->{result}->[$i]{path} = decode_base64( $res->{result}[$i]{path} ); 
+  }
+
+  $res;
+};
+
+fbx_api_method file_info => (
+  description => <<'',
+Get file information.
+
+  path => "fs/info/",
+  method => 'GET',
+  params => [ qw/suff/ ],
+  required => [ qw/suff/ ],
+);
+
+around file_info => sub {
+  my $orig = shift;
+  my $self = shift;
+  
+  if (@_) {
+    my $params = $_[0];
+    $params->{suff} = encode_base64( $params->{suff}, "") if exists $params->{suff} and $params->{suff};
+  }
+
+  my $params = $self->$orig(@_);
+
+  for (qw/parent target path/) { 
+    $params->{result}{$_} = decode_base64( $params->{result}{$_} ) if exists $params->{result}{$_} and $params->{result}{$_};
+  }
+
+  $params;
+};
+
+#TODO mv, cp, rm, cat, archive, extract, repair, hash, mkdir, rename
+
+fbx_api_method download_file => (
+  description => <<'',
+Download a file.
+
+  path => "dl/",
+  method => 'GET',
+  params => [ qw/suff/ ],
+  required => [ qw/suff/ ],
+);
+
+around download_file => sub {
+  my $orig = shift;
+  my $self = shift;
+  
+  if (@_) {
+    my $params = $_[0];
+    $params->{suff} = encode_base64( $params->{suff}, "") if exists $params->{suff} and $params->{suff};
+  }
+
+  $self->$orig(@_)->{content};
+};
 
 #Share
 fbx_api_method s'/'_'gr => (
