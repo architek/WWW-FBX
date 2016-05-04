@@ -1,6 +1,8 @@
 Revision history for Perl extension WWW-FBX
 
 {{$NEXT}}
+
+0.06 2016-05-04T21:43:34Z
     - Download API done
     - Feeds API done
     - More FS API
