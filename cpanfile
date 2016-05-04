@@ -11,6 +11,7 @@ requires 'Try::Tiny';
 requires 'LWP::UserAgent';
 requires 'URI';
 requires 'Devel::StackTrace';
+requires 'MIME::Base64';
 
 on 'test' => sub {
     requires 'Test::More', '0.98';

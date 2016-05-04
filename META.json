@@ -49,6 +49,7 @@
             "HTTP::Request" : "0",
             "JSON::MaybeXS" : "0",
             "LWP::UserAgent" : "0",
+            "MIME::Base64" : "0",
             "Moose" : "0",
             "Scalar::Util" : "0",
             "Try::Tiny" : "0",
