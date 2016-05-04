@@ -105,8 +105,12 @@ sub _parse_result {
         die WWW::FBX::Error->new(fbx_error => $j_obj, http_response => $res);
     }
 
-    #If no API error and HTTP is 200
+    #If no API error and HTTP is 200 and answer is json
     return $j_obj if $res->is_success && defined $j_obj;
+
+    #API Download file does not return JSON!!
+    #If answer is 200 and not json, return unchanged (but still pack it in an HashRef for uar type check..)
+    return {content => $content} if $res->is_success;
 
     #Else die on HTTP failures, which might contain a json response or not
     my $error = WWW::FBX::Error->new(http_response => $res);
