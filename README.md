@@ -66,9 +66,13 @@ The constructor takes care of detecting the API version and authentication.
 
 Return values are perl hashes.
 
-The same response is also available through the uar method.
+The hash response of the last request is available through the uar method.
+
+The HTTP::Response is available through the uarh method.
 
 This distribution is heavily inspired from [Net::Twitter](https://metacpan.org/pod/Net::Twitter).
+
+The currently available services implemented in this module is given in [WWW::FBX::Role::API::APIv3](https://metacpan.org/pod/WWW::FBX::Role::API::APIv3). Pull requests are welcome!
 
 # LICENSE
 
