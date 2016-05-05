@@ -399,7 +399,7 @@ Global upload getters.
 
   path => $_,
   method => 'GET',
-  params => [ ],
+  params => [ qw/suff/ ],
   required => [ ],
 ) for qw(upload/);
 
@@ -431,7 +431,7 @@ Upload file.
 
   path => "upload/",
   method => 'POST',
-  params => [ qw/id suff dirname name/ ],
+  params => [ qw/filename id suff dirname name/ ],
   required => [ qw/name/],
   content_type => 'form-data',
 );
