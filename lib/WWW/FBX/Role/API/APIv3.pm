@@ -861,6 +861,10 @@ my $res = $fbx->mark_all_read({suff=>"1/items/mark_all_as_read"};
 
 my $res = $res = $fbx->add_feed({url=>"http://www.nzb-rss.com/rss/Debian-unstable.rss"});
 
+=head3 download file to disk
+
+my $res = $res = $fbx->download_file({suff=>"Disque dur/Photos/cyril/DSCF4322.JPG"});
+
 =head3 update downloads config
 
 my $res = $res = $fbx->upd_downloads_config({max_downloading_tasks => 6, download_dir=>"/Disque dur/Téléchargements/"});
@@ -889,7 +893,7 @@ my $res = $fbx->fs_tasks;
 
 my $res = $fbx->fs_tasks({suff=>"12"});
 
-=head3 fs task
+=head3 update fs task
 
 my $res = $fbx->upd_task({suff=>"12", state=>"paused"});
 
