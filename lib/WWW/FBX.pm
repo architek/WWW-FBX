@@ -79,10 +79,10 @@ sub _prepare_request {
     else {
         croak "unexpected HTTP method: $http_method";
     }
- 
+
     return $msg;
 }
- 
+
 sub _query_string_for {
     my ( $self, $args ) = @_;
 
@@ -95,12 +95,12 @@ sub _query_string_for {
 }
 
 sub _send_request { shift->ua->request(shift) }
- 
+
 sub _parse_result {
     my ($self, $res, $args) = @_;
- 
+
     my $content = $res->content;
- 
+
     my $j_obj = length $content ? try { $self->from_json($content) } : {};
 
     #Die if message contains an API error (even on HTTP 200)
@@ -118,7 +118,7 @@ sub _parse_result {
     #Else die on HTTP failures, which might contain a json response or not
     my $error = WWW::FBX::Error->new(http_response => $res);
     $error->fbx_error($j_obj) if ref $j_obj;
- 
+
     die $error;
 }
 
@@ -149,16 +149,16 @@ Authentication is provided through the Auth role but other authentication mechan
     use Scalar::Util 'blessed';
 
     my $res;
-    eval { 
-        my $fbx = WWW::FBX->new( 
-            app_id => "APP ID", 
-            app_name => "APP NAME", 
-            app_version => "1.0", 
-            device_name => "debian", 
-            track_id => "48", 
+    eval {
+        my $fbx = WWW::FBX->new(
+            app_id => "APP ID",
+            app_name => "APP NAME",
+            app_version => "1.0",
+            device_name => "debian",
+            track_id => "48",
             app_token => "2/g43EZYD8AO7tbnwwhmMxMuELtTCyQrV1goMgaepHWGrqWlloWmMRszCuiN2ftp",
         );
-        print "You are now authenticated with track_id ", $fbx->track_id, " and app_token ", $fbx->app_token, "\n"; 
+        print "You are now authenticated with track_id ", $fbx->track_id, " and app_token ", $fbx->app_token, "\n";
         print "App permissions are:\n";
         while ( my( $key, $value ) = each %{ $fbx->uar->{result}{permissions} } ) {
             print "\t $key\n" if $value;
@@ -172,7 +172,7 @@ Authentication is provided through the Auth role but other authentication mechan
 
     if ( my $err = $@ ) {
         die $@ unless blessed $err && $err->isa('WWW::FBX::Error');
- 
+
         warn "HTTP Response Code: ", $err->code, "\n",
              "HTTP Message......: ", $err->message, "\n",
              "API Error.........: ", $err->error, "\n",
