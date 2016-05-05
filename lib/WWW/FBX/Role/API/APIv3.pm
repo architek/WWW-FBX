@@ -21,7 +21,7 @@ Get API version.
 around api_version => sub {
   my $orig = shift;
   my $self = shift;
-  
+
   api_url( "" );
   $self->$orig;
   my $uar = $self->uar;
@@ -230,10 +230,10 @@ Update downloads config.
 around downloads_config => sub {
   my $orig = shift;
   my $self = shift;
-  
+
   my $params = $self->$orig(@_);
 
-  for (qw/download_dir watch_dir/) { 
+  for (qw/download_dir watch_dir/) {
     $params->{result}{$_} = decode_base64( $params->{result}{$_} ) if exists $params->{result}{$_} and $params->{result}{$_};
   }
 
@@ -246,7 +246,7 @@ around upd_downloads_config => sub {
 
   if (@_) {
     my $params = $_[0];
-    for my $par (qw/download_dir watch_dir/) { 
+    for my $par (qw/download_dir watch_dir/) {
       $params->{$par} = encode_base64( $params->{$par}, "") if exists $params->{$par} and $params->{$par};
     }
   }
@@ -316,7 +316,7 @@ around list_files => sub {
 
   my $res = $self->$orig(@_);
   for my $i ( 0.. $#{$res->{result}} ) {
-    $res->{result}->[$i]{path} = decode_base64( $res->{result}[$i]{path} ); 
+    $res->{result}->[$i]{path} = decode_base64( $res->{result}[$i]{path} );
   }
 
   $res;
@@ -335,7 +335,7 @@ Get file information.
 around file_info => sub {
   my $orig = shift;
   my $self = shift;
-  
+
   if (@_) {
     my $params = $_[0];
     $params->{suff} = encode_base64( $params->{suff}, "") if exists $params->{suff} and $params->{suff};
@@ -343,7 +343,7 @@ around file_info => sub {
 
   my $params = $self->$orig(@_);
 
-  for (qw/parent target path/) { 
+  for (qw/parent target path/) {
     $params->{result}{$_} = decode_base64( $params->{result}{$_} ) if exists $params->{result}{$_} and $params->{result}{$_};
   }
 
@@ -365,14 +365,14 @@ Download a file.
 around download_file => sub {
   my $orig = shift;
   my $self = shift;
-  
+
   if (@_) {
     my $params = $_[0];
     $params->{suff} = encode_base64( $params->{suff}, "") if exists $params->{suff} and $params->{suff};
   }
 
   my $res = $self->$orig(@_);
-  if ($res->{filename} and $res->{content}) { 
+  if ($res->{filename} and $res->{content}) {
     open my $f, ">", $res->{filename} or die "Can't create file $res->{filename} : $!";
     print $f $res->{content};
     close $f;
@@ -402,6 +402,73 @@ Global upload getters.
   params => [ ],
   required => [ ],
 ) for qw(upload/);
+
+fbx_api_method upload_auth => (
+  description => <<'',
+Upload auth.
+
+  path => "upload/",
+  method => 'POST',
+  params => [ qw/dirname upload_name/ ],
+  required => [ qw/dirname upload_name/],
+);
+
+around upload_auth => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  if (@_) {
+    my $params = $_[0];
+    $params->{dirname} = encode_base64( $params->{dirname}, "") if exists $params->{dirname} and $params->{dirname};
+  }
+
+  $self->$orig(@_);
+};
+
+fbx_api_method upload_file => (
+  description => <<'',
+Upload file.
+
+  path => "upload/",
+  method => 'POST',
+  params => [ qw/id suff dirname name/ ],
+  required => [ qw/name/],
+  content_type => 'form-data',
+);
+
+#if user provided an id, use this one otherwise request one (in that case dirname and upload_name have to be provided)
+around upload_file => sub {
+  my $orig = shift;
+  my $self = shift;
+  my $params = $_[0];
+  my $id;
+
+  if ($params and exists $params->{filename} and $params->{filename}) {
+    my $filename = delete $params->{filename};
+    $params->{name} = [ $filename ];
+    if (exists $params->{id}) {
+      $id = delete $params->{id};
+    } else {
+      $params->{upload_name} = $filename unless exists $params->{upload_name};
+      my $res = $self->upload_auth(@_);
+      delete $params->{dirname};
+      delete $params->{upload_name};
+      $id = $res->{result}{id};
+    }
+    $params->{suff} = "$id/send";
+  };
+  $self->$orig(@_);
+};
+
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Delete downloads.
+
+  path => $_,
+  method => 'DELETE',
+  params => [ ],
+  required => [ ],
+) for qw(upload/clean);
 
 #AirMedia
 fbx_api_method s'/'_'gr => (
@@ -670,7 +737,7 @@ Global VPN client getters.
   method => 'GET',
   params => [ ],
   required => [ ],
-) for qw(vpn_client/config/ vpn_client/status vpn_client/log); 
+) for qw(vpn_client/config/ vpn_client/status vpn_client/log);
 
 #Storage
 fbx_api_method s'/'_'gr => (
