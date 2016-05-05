@@ -70,7 +70,6 @@ sub _prepare_request {
             $msg = POST( $uri,  Content_Type => 'application/json', Content =>  encode_json $args );
         }
         elsif ( $content_type eq "form-data" ) {
-            print "$http_method : $uri\n";
             $msg = POST($uri, Content_Type => 'form-data', Content => [ map { ref $_ ? $_ : encode_utf8 $_ } %$args ]);
         }
         else {
