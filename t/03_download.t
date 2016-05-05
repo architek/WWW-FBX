@@ -2,14 +2,14 @@ use strict;
 use Test::More 0.98;
 use WWW::FBX;
 
-plan skip_all => "FBX_APP_ID, FBX_APP_NAME, FBX_APP_VERSION, FBX_TRACK_ID, FBX_APP_TOKEN not all set" 
+plan skip_all => "FBX_APP_ID, FBX_APP_NAME, FBX_APP_VERSION, FBX_TRACK_ID, FBX_APP_TOKEN not all set"
     unless $ENV{FBX_APP_ID} and $ENV{FBX_APP_NAME} and $ENV{FBX_APP_VERSION} and $ENV{FBX_TRACK_ID} and $ENV{FBX_APP_TOKEN};
 
 my $fbx;
 my $res;
 
-eval { 
-  $fbx = WWW::FBX->new ( 
+eval {
+  $fbx = WWW::FBX->new (
     app_id => $ENV{FBX_APP_ID},
     app_name => $ENV{FBX_APP_NAME},
     app_version => $ENV{FBX_APP_VERSION},
@@ -17,7 +17,7 @@ eval {
     track_id => $ENV{FBX_TRACK_ID},
     app_token => $ENV{FBX_APP_TOKEN},
   );
-  
+ 
   isa_ok $fbx, "WWW::FBX", "download";
   ok($fbx->downloads, "downloads");
 #  ok($fbx->get_download_task( { suff => "0" } ), "download task");
@@ -45,7 +45,10 @@ eval {
 #  ok($res = $fbx->upd_downloads_config({max_downloading_tasks => 6, download_dir=>"/Disque dur/Téléchargements/"}), "update downloads config");
 #  ok($res = $fbx->upd_downloads_throttle({throttling => "schedule"}), "update throttling");
 #  ok($res = $fbx->download_file({suff=>"Disque dur/Photos/cyril/DSCF4322.JPG"}), "download file to disk");
-#
+#  ok($res = $fbx->upload_auth( {upload_name => "DSCF4322.JPG", dirname => "/Disque dur/"} ), "get upload id");
+#  ok($res = $fbx->upload_file( {id=> $res->{result}{id}, filename=>"DSCF4322.JPG"}), "upload file by upload id");
+#  ok($res = $fbx->upload_file( {filename => "DSCF4322.JPG", dirname => "/Disque dur/"} ), "upload file directly");
+
   ok($fbx->downloads_config, "downloads config");
 };
 
