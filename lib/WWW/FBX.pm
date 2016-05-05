@@ -20,6 +20,7 @@ our $VERSION="0.06";
 has lwp_args    => ( isa => 'HashRef', is => 'ro', default => sub { {} } );
 has ua          => ( isa => 'LWP::UserAgent', is => 'rw', lazy => 1, builder => '_build_ua' );
 has uar         => ( isa => 'HashRef', is => 'rw' );
+has uarh        => ( isa => 'HTTP::Response', is => 'rw' );
 has [ qw/app_id app_name app_version device_name/ ] => ( 
     isa => 'Str', is => 'ro', required => 1 );
 
@@ -43,8 +44,11 @@ sub _json_request {
     my $msg = $self->_prepare_request($http_method, $uri, $args, $content_type);
     my $res = $self->_send_request($msg);
 
-    #Store response
+    #Store response content
     $self->uar( $self->_parse_result ($res, $args ) );
+
+    #And HTTP response RAW
+    $self->uarh( $res );
 
     return $self->uar;
 }
@@ -110,7 +114,7 @@ sub _parse_result {
 
     #API Download file does not return JSON!!
     #If answer is 200 and not json, return unchanged (but still pack it in an HashRef for uar type check..)
-    return {content => $content} if $res->is_success;
+    return {filename => $res->filename, content => $content} if $res->filename and $res->is_success;
 
     #Else die on HTTP failures, which might contain a json response or not
     my $error = WWW::FBX::Error->new(http_response => $res);
@@ -192,9 +196,13 @@ The constructor takes care of detecting the API version and authentication.
 
 Return values are perl hashes.
 
-The same response is also available through the uar method.
+The hash response of the last request is available through the uar method.
+
+The HTTP::Response is available through the uarh method.
 
 This distribution is heavily inspired from L<Net::Twitter>.
+
+The currently available services implemented in this module is given in L<WWW::FBX::Role::API::APIv3>. Pull requests are welcome!
 
 =head1 LICENSE
 
