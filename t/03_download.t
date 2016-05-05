@@ -44,6 +44,8 @@ eval {
 #  ok($res = $fbx->add_feed({url=>"http://www.nzb-rss.com/rss/Debian-unstable.rss"}), "add feed");
 #  ok($res = $fbx->upd_downloads_config({max_downloading_tasks => 6, download_dir=>"/Disque dur/Téléchargements/"}), "update downloads config");
 #  ok($res = $fbx->upd_downloads_throttle({throttling => "schedule"}), "update throttling");
+#  ok($res = $fbx->download_file({suff=>"Disque dur/Photos/cyril/DSCF4322.JPG"}), "download file to disk");
+#
   ok($fbx->downloads_config, "downloads config");
 };
 

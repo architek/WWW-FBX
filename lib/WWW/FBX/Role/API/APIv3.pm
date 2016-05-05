@@ -371,7 +371,14 @@ around download_file => sub {
     $params->{suff} = encode_base64( $params->{suff}, "") if exists $params->{suff} and $params->{suff};
   }
 
-  $self->$orig(@_)->{content};
+  my $res = $self->$orig(@_);
+  if ($res->{filename} and $res->{content}) { 
+    open my $f, ">", $res->{filename} or die "Can't create file $res->{filename} : $!";
+    print $f $res->{content};
+    close $f;
+  }
+
+  $res;
 };
 
 #Share
