@@ -30,18 +30,16 @@ sub fbx_api_method {
     my $class = Moose::Meta::Class->initialize($caller);
 
     my ($arg_names, $all_args, $path) = @options{qw/required params path/};
-    $arg_names = $options{params} if @$arg_names == 0 && @{$options{params}} == 1;
 
     my $code = sub {
         my $self = shift;
-
         my $args = ref $_[-1] eq 'HASH' ? { %{pop @_} } : {};
 
-        croak sprintf "$name expected %d args", scalar @$arg_names if @_ > @$arg_names;
+        croak sprintf "$name expected %d args", scalar @$all_args if @_ > @$all_args;
 
         # promote positional args to named args
         for ( my $i = 0; @_; ++$i ) {
-            my $param = $arg_names->[$i];
+            my $param = $all_args->[$i];
             croak "duplicate param $param: both positional and named"
                 if exists $args->{$param};
 
@@ -55,19 +53,12 @@ sub fbx_api_method {
                     "Params:", join(",",@$all_args), "\nRequired:", join(",", @$arg_names), "\n" ;
             }
         }
+
         #find missing req
         for my $req (@$arg_names) {
-            unless ( grep { $_ eq $req } keys %$args ) {
+            unless ( grep { $_ eq $req } keys %$args or !defined ($args->{req}) ) {
                 die "Missing required param $req for $name\n", "Description:$options{description}" ,
                     "Params:", join(",",@$all_args), "\nRequired:", join(",", @$arg_names), "\n" ;
-            }
-        }
-
-        # promote boolean parameters
-        for my $boolean_arg ( @{ $options{booleans} } ) {
-            if ( exists $args->{$boolean_arg} ) {
-                next if $args->{$boolean_arg} =~ /^true|false$/;
-                $args->{$boolean_arg} = $args->{$boolean_arg} ? 'true' : 'false';
             }
         }
 
@@ -108,7 +99,6 @@ has method          => ( isa => 'Str', is => 'ro', default => 'GET' );
 has params          => ( isa => 'ArrayRef[Str]', is => 'ro', default => sub { [] } );
 has required        => ( isa => 'ArrayRef[Str]', is => 'ro', default => sub { [] } );
 has returns         => ( isa => 'Str', is => 'ro', predicate => 'has_returns' );
-has booleans        => ( isa => 'ArrayRef[Str]', is => 'ro', default => sub { [] } );
 has content_type    => ( isa => 'Str', is => 'ro', default => '' );
 has suff            => ( isa => 'Str', is => 'ro', default => '' );
 
