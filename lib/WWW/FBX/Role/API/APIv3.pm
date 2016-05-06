@@ -782,357 +782,397 @@ The following methods are currently implemented in this library:
 
 =head3 call log
 
-my $res = $fbx->call_log;
+$fbx->call_log;
 
 =head3 contact
 
-my $res = $fbx->contact;
+$fbx->contact;
 
 =head2 connection
 
 =head3 connection
 
-my $res = $fbx->connection;
+$fbx->connection;
 
 =head3 connection config
 
-my $res = $fbx->connection_config;
+$fbx->connection_config;
 
 =head3 connection ipv6 config
 
-my $res = $fbx->connection_ipv6_config;
+$fbx->connection_ipv6_config;
 
 =head3 connection xdsl
 
-my $res = $fbx->connection_xdsl;
+$fbx->connection_xdsl;
 
 =head3 connection ftth
 
-my $res = $fbx->connection_ftth;
+$fbx->connection_ftth;
 
 =head3 connection dyndns noip
 
-my $res = $fbx->connection_dyndns({suff=>"noip/status"});
+$fbx->connection_dyndns("noip/status");
 
 =head2 dhcp
 
 =head3 dhcp config
 
-my $res = $fbx->dhcp_config;
+$fbx->dhcp_config;
 
 =head3 dhcp static lease
 
-my $res = $fbx->dhcp_static_lease;
+$fbx->dhcp_static_lease;
 
 =head3 dhcp dynamic lease
 
-my $res = $fbx->dhcp_dynamic_lease;
+$fbx->dhcp_dynamic_lease;
 
 =head2 download
 
 =head3 downloads
 
-my $res = $fbx->downloads;
+$fbx->downloads;
 
 =head3 download task
 
-my $res = $fbx->get_download_task( { suff => "0" } );
+$fbx->get_download_task( 77 );
 
 =head3 download task log
 
-my $res = $fbx->get_download_task( { suff => "0/log" } );
+$fbx->get_download_task( "77/log" );
 
 =head3 downloads task del
 
-my $res = $fbx->del_download_task( { suff => "0" } );
+$fbx->del_download_task( 77 );
 
 =head3 downloads task del with file erase
 
-my $res = $fbx->del_download_task( { suff => "0/erase" } );
+$fbx->del_download_task( "77/erase" );
 
 =head3 downloads update
 
-my $res = $fbx->upd_download_task( { suff => "0", io_priority => "high" } );
+$fbx->upd_download_task( 0, { io_priority => "high" } );
 
 =head3 download add
 
-my $res = $res = $fbx->add_download_task( { download_url => "http://cdimage.debian.org/debian-cd/current/arm64/bt-cd/debian-8.4.0-arm64-CD-1.iso.torrent"} );
+$res = $fbx->add_download_task( { download_url => "http://cdimage.debian.org/debian-cd/current/arm64/bt-cd/debian-8.4.0-arm64-CD-1.iso.torrent"} );
 
 =head3 download add by local file
 
-my $res = $res=$fbx->add_download_task_file( {download_file => [ "debian-8.4.0-arm64-netinst.iso.torrent" ] });
+$res=$fbx->add_download_task_file( {download_file => [ "debian-8.4.0-arm64-netinst.iso.torrent" ] });
 
 =head3 update priority of download file
 
-my $res = $res=$fbx->change_prio_download_file( {suff=>"76/files/76-0", priority=>"high"} );
+$res=$fbx->change_prio_download_file( "76/files/76-0", { priority=>"high"} );
 
 =head3 download tracker
 
-my $res = $res = $fbx->get_download_task( {suff => "76/trackers"});
+$res = $fbx->get_download_task( "76/trackers");
 
 =head3 download peers
 
-my $res = $res = $fbx->get_download_task( {suff => "76/peers"});
+$res = $fbx->get_download_task( "76/peers");
 
 =head3 downloads stats
 
-my $res = $fbx->downloads_stats;
+$fbx->downloads_stats;
 
 =head3 download feeds
 
-my $res = $fbx->downloads_feeds;
+$fbx->downloads_feeds;
 
 =head3 download feed
 
-my $res = $fbx->downloads_feeds( { suff => "1"};
+$fbx->downloads_feeds( 1 );
 
 =head3 del feed
 
-my $res = $fbx->del_feed({suff => "1"});
+$fbx->del_feed( 1 );
 
 =head3 update feed
 
-my $res = $fbx->upd_feed({suff=>"1", auto_download=> \1});
+$fbx->upd_feed(1, {auto_download=> \1});
 
 =head3 refresh feed
 
-my $res = $fbx->refresh_feed({suff=>"1/fetch"});
+$fbx->refresh_feed("1/fetch");
 
 =head3 refresh all feeds
 
-my $res = $fbx->refresh_feeds;
+$fbx->refresh_feeds;
 
 =head3 download feed items
 
-my $res = $fbx->downloads_feeds({suff=>"1/items"};
+$fbx->downloads_feeds("1/items");
 
 =head3 update a feed item
 
-my $res = $fbx->upd_feed({suff=>"1/items/6"};
+$fbx->upd_feed("1/items/6");
 
 =head3 download a feed item
 
-my $res = $fbx->download_feed_item({suff=>"1/items/6/download"};
+$fbx->download_feed_item("1/items/6/download");
 
 =head3 mark all items as read
 
-my $res = $fbx->mark_all_read({suff=>"1/items/mark_all_as_read"};
+$fbx->mark_all_read( "1/items/mark_all_as_read" );
 
 =head3 add feed
 
-my $res = $res = $fbx->add_feed({url=>"http://www.nzb-rss.com/rss/Debian-unstable.rss"});
-
-=head3 download file to disk
-
-my $res = $res = $fbx->download_file({suff=>"Disque dur/Photos/cyril/DSCF4322.JPG"});
+$res = $fbx->add_feed("http://www.nzb-rss.com/rss/Debian-unstable.rss");
 
 =head3 update downloads config
 
-my $res = $res = $fbx->upd_downloads_config({max_downloading_tasks => 6, download_dir=>"/Disque dur/Téléchargements/"});
+$res = $fbx->upd_downloads_config({max_downloading_tasks => 6, download_dir=>"/Disque dur/Téléchargements/"});
 
 =head3 update throttling
 
-my $res = $res = $fbx->upd_downloads_throttle({throttling => "schedule"});
+$res = $fbx->upd_downloads_throttle( "schedule" );
+
+=head3 download file to disk
+
+$res = $fbx->download_file( "Disque dur/Photos/cyril/DSCF4322.JPG" );
+
+=head3 get upload id
+
+$res = $fbx->upload_auth( {upload_name => "DSCF4322.JPG", dirname => "/Disque dur/"} );
+
+=head3 upload file by upload id
+
+$res = $fbx->upload_file( {id=> $res->{result}{id}, filename=>"DSCF4322.JPG"});
+
+=head3 upload file directly
+
+$res = $fbx->upload_file( {filename => "DSCF4322.JPG", dirname => "/Disque dur/"} );
 
 =head3 downloads config
 
-my $res = $fbx->downloads_config;
+$fbx->downloads_config;
 
 =head2 freeplugs
 
-=head3 freeplugs_net
+=head3 list freeplugs
 
-my $res = $fbx->freeplugs_net;
+$fbx->freeplugs_net;
+
+=head3 get a particular freeplugs
+
+$fbx->freeplugs_net("F4:CA:E5:1D:46:AE");
+
+=head3 reset freeplug
+
+$fbx->reset_freeplug("F4:CA:E5:1D:46:AE");
 
 =head2 fs
 
 =head3 fs tasks
 
-my $res = $fbx->fs_tasks;
+$fbx->fs_tasks;
 
 =head3 fs task
 
-my $res = $fbx->fs_tasks({suff=>"12"});
+$fbx->fs_tasks(12);
+
+=head3 del fs task
+
+$fbx->del_task(12);
 
 =head3 update fs task
 
-my $res = $fbx->upd_task({suff=>"12", state=>"paused"});
+$fbx->upd_task(12, state=>"paused"});
 
 =head3 list files
 
-my $res = $fbx->list_files({suff=>"/Disque dur/Photos/"});
+$res = $fbx->list_files("Disque dur/");
 
 =head3 file info
 
-my $res = $res = $fbx->file_info({suff=>"Disque dur/Photos/Sydney/DSCF4323.JPG"});
+$res = $fbx->file_info("Disque dur/Photos/Sydney/DSCF4323.JPG");
+
+=head3  not JSON!
+
+$res = $fbx->download_file("Disque dur/Photos/cyril/DSCF4322.JPG"), "download RAW file;
 
 =head2 ftp
 
 =head3 ftp config
 
-my $res = $fbx->ftp_config;
+$fbx->ftp_config;
 
 =head2 lan
 
 =head3 lan config
 
-my $res = $fbx->lan_config;
+$fbx->lan_config;
 
 =head3 lan browser interfaces
 
-my $res = $res = $fbx->lan_browser_interfaces;
+$res = $fbx->lan_browser_interfaces;
 
 =head3 lan browser interfaces pub
 
-my $res = $fbx->list_hosts({ suff => $res->{result}->[0]->{name} });
+$fbx->list_hosts($res->{result}->[0]->{name} );
 
 =head2 lcd
 
 =head3 lcd
 
-my $res = $res = $fbx->lcd;
+$res = $fbx->lcd;
 
 =head3 lcd brightness back
 
-my $res = $fbx->set_lcd({ brightness => $res->{result}{brightness} });
+$fbx->set_lcd({ brightness => $res->{result}{brightness} });
 
 =head2 nat
 
 =head3 fw dmz
 
-my $res = $fbx->fw_dmz;
+$fbx->fw_dmz;
 
 =head3 fw redir
 
-my $res = $fbx->fw_redir;
+$fbx->fw_redir;
 
 =head3 fw incoming
 
-my $res = $fbx->fw_incoming;
+$fbx->fw_incoming;
 
 =head2 parental
 
 =head3 parental config
 
-my $res = $fbx->parental_config;
+$fbx->parental_config;
 
 =head3 parental filter
 
-my $res = $fbx->parental_filter;
+$fbx->parental_filter;
 
 =head2 share
 
 =head3 share link
 
-my $res = $fbx->share_link;
+$fbx->share_link;
 
-=head3 upload
+=head3 upload status
 
-my $res = $fbx->upload;
+$fbx->upload;
+
+=head3 upload status of a task
+
+$fbx->upload(1);
 
 =head3 airmedia config
 
-my $res = $fbx->airmedia_config;
+$fbx->airmedia_config;
 
 =head3 airmedia receivers
 
-my $res = $fbx->airmedia_receivers;
+$fbx->airmedia_receivers;
 
 =head2 shares
 
 =head3 netshare samba
 
-my $res = $fbx->netshare_samba;
+$fbx->netshare_samba;
 
 =head3 netshare afp
 
-my $res = $fbx->netshare_afp;
+$fbx->netshare_afp;
 
 =head2 storage
 
 =head3 storage disk
 
-my $res = $fbx->storage_disk;
+$fbx->storage_disk;
 
 =head3 storage partition
 
-my $res = $fbx->storage_partition;
+$fbx->storage_partition;
 
 =head2 switch
 
 =head3 switch status
 
-my $res = $fbx->switch_sts;
+$fbx->switch_sts;
 
 =head2 system
 
-=head3 system
+=head3 get system info
 
-my $res = $fbx->system;
+$fbx->system;
+
+=head3 reboot system
+
+$fbx->reboot;
 
 =head2 upnp
 
 =head3 upnpigd config
 
-my $res = $fbx->upnpigd_config;
+$fbx->upnpigd_config;
 
 =head3 upnpigd redir
 
-my $res = $fbx->upnpigd_redir;
+$fbx->upnpigd_redir;
 
 =head2 upnpav
 
 =head3 upnpav
 
-my $res = $fbx->upnpav;
+$res=$fbx->upnpav;
+
+=head3 set upnpav
+
+$fbx->set_upnpav($res->{result}{enabled});
 
 =head2 vpn
 
 =head3 vpn
 
-my $res = $fbx->vpn;
+$fbx->vpn;
 
 =head3 vpn user
 
-my $res = $fbx->vpn_user;
+$fbx->vpn_user;
 
 =head3 vpn ip_pool
 
-my $res = $fbx->vpn_ip_pool;
+$fbx->vpn_ip_pool;
 
 =head3 vpn client config
 
-my $res = $fbx->vpn_client_config;
+$fbx->vpn_client_config;
 
 =head3 vpn client status
 
-my $res = $fbx->vpn_client_status;
+$fbx->vpn_client_status;
 
 =head3 vpn client log
 
-my $res = $fbx->vpn_client_log;
+$fbx->vpn_client_log;
 
 =head2 wifi
 
 =head3 wifi config
 
-my $res = $fbx->wifi_config;
+$fbx->wifi_config;
 
 =head3 wifi ap
 
-my $res = $fbx->wifi_ap;
+$fbx->wifi_ap;
 
 =head3 wifi bss
 
-my $res = $fbx->wifi_bss;
+$fbx->wifi_bss;
 
 =head3 wifi planning
 
-my $res = $fbx->wifi_planning;
+$fbx->wifi_planning;
 
 =head3 wifi mac filter
 
-my $res = $fbx->wifi_mac_filter;
+$fbx->wifi_mac_filter;
 
 =head1 LICENSE
 
