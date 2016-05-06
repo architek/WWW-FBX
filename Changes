@@ -1,6 +1,9 @@
 Revision history for Perl extension WWW-FBX
 
 {{$NEXT}}
+    - Allow passing positional arguments in the order of "params"
+    - Upload done
+    - Now download takes care of file handling
 
 0.06 2016-05-04T21:43:34Z
     - Download API done
