@@ -18,7 +18,9 @@ eval {
   );
   
   isa_ok $fbx, "WWW::FBX", "freeplugs";
-  ok($fbx->freeplugs_net, "freeplugs_net");
+  ok($fbx->freeplugs_net, "list freeplugs");
+#  ok($fbx->freeplugs_net("F4:CA:E5:1D:46:AE"), "get a particular freeplugs");
+#  ok($fbx->reset_freeplug("F4:CA:E5:1D:46:AE"), "reset freeplug");
 };
 
 if ( my $err = $@ ) {

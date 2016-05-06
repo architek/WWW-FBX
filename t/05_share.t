@@ -19,7 +19,8 @@ eval {
   
   isa_ok $fbx, "WWW::FBX", "share";
   ok($fbx->share_link, "share link");
-  ok($fbx->upload, "upload");
+  ok($fbx->upload, "upload status");
+#  ok($fbx->upload(1), "upload status of a task");
   ok($fbx->airmedia_config, "airmedia config");
   ok($fbx->airmedia_receivers, "airmedia receivers");
 };

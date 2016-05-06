@@ -21,7 +21,7 @@ eval {
   isa_ok $fbx, "WWW::FBX", "lan";
   ok($fbx->lan_config, "lan config");
   ok($res = $fbx->lan_browser_interfaces, "lan browser interfaces");
-  ok($fbx->list_hosts({ suff => $res->{result}->[0]->{name} }), "lan browser interfaces pub");
+  ok($fbx->list_hosts($res->{result}->[0]->{name} ), "lan browser interfaces pub");
 };
 
 if ( my $err = $@ ) {

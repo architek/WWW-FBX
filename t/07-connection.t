@@ -25,7 +25,7 @@ eval {
   ok($fbx->connection_ipv6_config, "connection ipv6 config");
   ok($fbx->connection_xdsl, "connection xdsl");
   ok($fbx->connection_ftth, "connection ftth");
-  ok($fbx->connection_dyndns({suff=>"noip/status"}), "connection dyndns noip");
+  ok($fbx->connection_dyndns("noip/status"), "connection dyndns noip");
 };
 
 if ( my $err = $@ ) {

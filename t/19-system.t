@@ -18,7 +18,8 @@ eval {
   );
   
   isa_ok $fbx, "WWW::FBX", "system";
-  ok($fbx->system, "system");
+  ok($fbx->system, "get system info");
+#  ok($fbx->reboot, "reboot system");
 };
 
 if ( my $err = $@ ) {
