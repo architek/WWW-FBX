@@ -24,11 +24,11 @@ sub BUILD {
   }
 
   #Check auth status or wait for physical granting on the device
-  $self->auth_progress( { suff => $self->track_id } );
+  $self->auth_progress( $self->track_id );
   while( ( $au_sts = $self->uar->{result}{status} ) eq "pending" ) { 
     $challenge = $self->uar->{result}{challenge};
     print "Please Confirm on the FB - Merci d'autoriser sur la FB\n";
-    $self->auth_progress( { suff => $self->track_id } );
+    $self->auth_progress( $self->track_id );
     sleep 1;
   }
 
