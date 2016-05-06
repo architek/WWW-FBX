@@ -107,7 +107,7 @@ Update the download task.
 
   path => 'downloads/',
   method => 'PUT',
-  params => [ qw/suff io_prority status/ ],
+  params => [ qw/suff io_priority status/ ],
   required => [ qw/suff/ ],
 );
 
@@ -139,8 +139,8 @@ Change the priority of a Download File.
 
   path => 'downloads/',
   method => 'PUT',
-  params => [ qw/suff prority/ ],
-  required => [ qw/suff prority/ ],
+  params => [ qw/suff priority/ ],
+  required => [ qw/suff priority/ ],
 );
 
 #TODO: tracker, blacklist
@@ -182,8 +182,8 @@ Update download feed.
 
   path => 'downloads/feeds/',
   method => 'PUT',
-  params => [ qw/suff/ ],
-  required => [ qw/suff/ ],
+  params => [ qw/suff auto_download/ ],
+  required => [ qw/suff / ],
 );
 
 fbx_api_method $_ => (
@@ -301,20 +301,18 @@ List files.
 
   path => "fs/ls/",
   method => 'GET',
-  params => [ qw/suff / ],
+  params => [ qw/suff/ ],
   required => [ qw/suff/ ],
 );
 
 around list_files => sub {
   my $orig = shift;
   my $self = shift;
+  my $params = shift;
 
-  if (@_) {
-    my $params = $_[0];
-    $params->{suff} = encode_base64( $params->{suff}, "") if exists $params->{suff} and $params->{suff};
-  }
+  $params = encode_base64( $params, "") if $params;
+  my $res = $self->$orig($params);
 
-  my $res = $self->$orig(@_);
   for my $i ( 0.. $#{$res->{result}} ) {
     $res->{result}->[$i]{path} = decode_base64( $res->{result}[$i]{path} );
   }
@@ -335,13 +333,11 @@ Get file information.
 around file_info => sub {
   my $orig = shift;
   my $self = shift;
+  my $params = shift;
 
-  if (@_) {
-    my $params = $_[0];
-    $params->{suff} = encode_base64( $params->{suff}, "") if exists $params->{suff} and $params->{suff};
-  }
-
-  my $params = $self->$orig(@_);
+  $params = encode_base64( $params, "") if $params;
+  
+  my $res = $self->$orig($params);
 
   for (qw/parent target path/) {
     $params->{result}{$_} = decode_base64( $params->{result}{$_} ) if exists $params->{result}{$_} and $params->{result}{$_};
@@ -365,13 +361,11 @@ Download a file.
 around download_file => sub {
   my $orig = shift;
   my $self = shift;
+  my $params = shift;
 
-  if (@_) {
-    my $params = $_[0];
-    $params->{suff} = encode_base64( $params->{suff}, "") if exists $params->{suff} and $params->{suff};
-  }
+  $params = encode_base64( $params, "") if $params;
 
-  my $res = $self->$orig(@_);
+  my $res = $self->$orig($params);
   if ($res->{filename} and $res->{content}) {
     open my $f, ">", $res->{filename} or die "Can't create file $res->{filename} : $!";
     print $f $res->{content};
@@ -444,17 +438,17 @@ around upload_file => sub {
   my $id;
 
   if ($params and exists $params->{filename} and $params->{filename}) {
-    my $filename = delete $params->{filename};
-    $params->{name} = [ $filename ];
     if (exists $params->{id}) {
       $id = delete $params->{id};
     } else {
-      $params->{upload_name} = $filename unless exists $params->{upload_name};
+      $params->{upload_name} = $params->{filename} 
+          unless exists $params->{upload_name};
       my $res = $self->upload_auth(@_);
       delete $params->{dirname};
       delete $params->{upload_name};
       $id = $res->{result}{id};
     }
+    $params->{name} = [ delete $params->{filename} ];
     $params->{suff} = "$id/send";
   };
   $self->$orig(@_);
