@@ -425,8 +425,8 @@ Upload file.
 
   path => "upload/",
   method => 'POST',
-  params => [ qw/filename id suff dirname name/ ],
-  required => [ qw/name/],
+  params => [ qw/id suff dirname name/ ],
+  required => [ qw/name suff/],
   content_type => 'form-data',
 );
 
@@ -436,21 +436,23 @@ around upload_file => sub {
   my $self = shift;
   my $params = $_[0];
   my $id;
+  my $filename;
 
   if ($params and exists $params->{filename} and $params->{filename}) {
+    $filename = delete $params->{filename};
     if (exists $params->{id}) {
       $id = delete $params->{id};
     } else {
-      $params->{upload_name} = $params->{filename} 
+      $params->{upload_name} = $filename
           unless exists $params->{upload_name};
       my $res = $self->upload_auth(@_);
       delete $params->{dirname};
       delete $params->{upload_name};
       $id = $res->{result}{id};
     }
-    $params->{name} = [ delete $params->{filename} ];
+    $params->{name} = [ $filename ];
     $params->{suff} = "$id/send";
-  };
+  }
   $self->$orig(@_);
 };
 
