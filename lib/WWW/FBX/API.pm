@@ -29,7 +29,7 @@ sub fbx_api_method {
 
     my $class = Moose::Meta::Class->initialize($caller);
 
-    my ($arg_names, $all_args, $path) = @options{qw/required params path/};
+    my ($arg_names, $all_args) = @options{qw/required params/};
 
     my $code = sub {
         my $self = shift;
@@ -61,7 +61,7 @@ sub fbx_api_method {
                     "Params:", join(",",@$all_args), "\nRequired:", join(",", @$arg_names), "\n" ;
             }
         }
-
+        my $path = $options{path};
         $path .= delete $args->{suff} if exists $args->{suff};
 
         my $uri = URI->new("$_base_url$_api_url/$path");
