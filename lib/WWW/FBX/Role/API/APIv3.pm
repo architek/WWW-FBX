@@ -882,11 +882,11 @@ $fbx->contact;
 
 =head3 connection
 
-$fbx->connection;
+ $res = $fbx->connection;
 
 =head3 connection config
 
-$fbx->connection_config;
+ $res = $fbx->connection_config;
 
 =head3 connection ipv6 config
 
@@ -900,9 +900,21 @@ $fbx->connection_xdsl;
 
 $fbx->connection_ftth;
 
+=head3 update connection config
+
+ $res = $fbx->upd_connection({ping=>\1});
+
+=head3 update connection ipv6 config
+
+ $res = $fbx->upd_ipv6_config({ipv6_enabled=>\0});
+
 =head3 connection dyndns noip
 
-$fbx->connection_dyndns("noip/status");
+$res = $fbx->connection_dyndns("noip/status");
+
+=head3 connection dyndns noip
+
+$res = $fbx->upd_connection_dyndns("noip/status", {enabled=>\0});
 
 =head2 dhcp
 
@@ -924,45 +936,9 @@ $fbx->dhcp_dynamic_lease;
 
 $fbx->downloads;
 
-=head3 download task
+=head3 downloads config
 
-$fbx->get_download_task( 77 );
-
-=head3 download task log
-
-$fbx->get_download_task( "77/log" );
-
-=head3 downloads task del
-
-$fbx->del_download_task( 77 );
-
-=head3 downloads task del with file erase
-
-$fbx->del_download_task( "77/erase" );
-
-=head3 downloads update
-
-$fbx->upd_download_task( 0, { io_priority => "high" } );
-
-=head3 download add
-
-$res = $fbx->add_download_task( { download_url => "http://cdimage.debian.org/debian-cd/current/arm64/bt-cd/debian-8.4.0-arm64-CD-1.iso.torrent"} );
-
-=head3 download add by local file
-
-$res=$fbx->add_download_task_file( {download_file => [ "debian-8.4.0-arm64-netinst.iso.torrent" ] });
-
-=head3 update priority of download file
-
-$res=$fbx->change_prio_download_file( "76/files/76-0", { priority=>"high"} );
-
-=head3 download tracker
-
-$res = $fbx->get_download_task( "76/trackers");
-
-=head3 download peers
-
-$res = $fbx->get_download_task( "76/peers");
+$fbx->downloads_config;
 
 =head3 downloads stats
 
@@ -972,21 +948,89 @@ $fbx->downloads_stats;
 
 $fbx->downloads_feeds;
 
+=head3 downloads config
+
+ $res = $fbx->downloads_config;
+
+=head3 download tasks
+
+ $res = $fbx->get_download_task;
+
+=head3 download add
+
+ $res = $fbx->add_download_task( { download_url => "http://cdimage.debian.org/debian-cd/current/arm64/bt-cd/debian-8.4.0-arm64-CD-1.iso.torrent"} );
+
+=head3 update downloads config
+
+$res = $fbx->upd_downloads_config({max_downloading_tasks => $max_dl_tasks});
+
+=head3 update throttling
+
+$res = $fbx->upd_downloads_throttle( "schedule" );
+
+=head3 download tasks
+
+ $res = $fbx->get_download_task;
+
+=head3 download task
+
+$res = $fbx->get_download_task( $id );
+
+=head3 download task log
+
+$res = $fbx->get_download_task( "$id/log" );
+
+=head3 downloads update
+
+$fbx->upd_download_task( $id, { io_priority => "high" } );
+
+=head3 get download task files
+
+$res = $fbx->get_download_task("$id/files") ;
+
+=head3 update priority of download file
+
+$res = $fbx->change_prio_download_file( "$id/files/$id_file", { priority=>"high"} );
+
+=head3 downloads task del
+
+$res = $fbx->del_download_task( $id );
+
+=head3 download add by local file
+
+$res = $fbx->add_download_task_file( {download_file => [ "mine/debian-8.4.0-arm64-netinst.iso.torrent" ] });
+
+=head3 download tracker
+
+$res = $fbx->get_download_task( "$id/trackers");
+
+=head3 download peers
+
+$res = $fbx->get_download_task( "$id/peers");
+
+=head3 downloads task del with file erase
+
+$fbx->del_download_task( "$id/erase" );
+
 =head3 download feed
 
-$fbx->downloads_feeds( 1 );
+$res = $fbx->downloads_feeds;
 
-=head3 del feed
+=head3 add feed
 
-$fbx->del_feed( 1 );
+$res = $fbx->add_feed( "http://www.esa.int/rssfeed/Our_Activities/Space_News" );
 
 =head3 update feed
 
-$fbx->upd_feed(1, {auto_download=> \1});
+$fbx->upd_feed( $id , {auto_download=> \1} );
+
+=head3 download feed
+
+$res = $fbx->downloads_feeds("$id/items");
 
 =head3 refresh feed
 
-$fbx->refresh_feed("1/fetch");
+$fbx->refresh_feed( "$id/fetch" );
 
 =head3 refresh all feeds
 
@@ -994,35 +1038,31 @@ $fbx->refresh_feeds;
 
 =head3 download feed items
 
-$fbx->downloads_feeds("1/items");
+$fbx->downloads_feeds("$id/items");
 
 =head3 update a feed item
 
-$fbx->upd_feed("1/items/6");
+$fbx->upd_feed("$id/items/$id_file");
 
 =head3 download a feed item
 
-$fbx->download_feed_item("1/items/6/download");
+$fbx->download_feed_item("$id/items/$id_file/download");
 
 =head3 mark all items as read
 
-$fbx->mark_all_read( "1/items/mark_all_as_read" );
+$fbx->mark_all_read( "$id/items/mark_all_as_read" );
 
-=head3 add feed
+=head3 del feed
 
-$res = $fbx->add_feed("http://www.nzb-rss.com/rss/Debian-unstable.rss");
-
-=head3 update downloads config
-
-$res = $fbx->upd_downloads_config({max_downloading_tasks => 6, download_dir=>"/Disque dur/Téléchargements/"});
-
-=head3 update throttling
-
-$res = $fbx->upd_downloads_throttle( "schedule" );
+$fbx->del_feed( $id );
 
 =head3 download file to disk
 
 $res = $fbx->download_file( "Disque dur/Photos/cyril/DSCF4322.JPG" );
+
+=head3 download file to disk
+
+$res = $fbx->download_file( "Disque dur/Photos/cyril/DSCF4321.JPG" );
 
 =head3 get upload id
 
@@ -1034,11 +1074,7 @@ $res = $fbx->upload_file( {id=> $res->{id}, filename=>"DSCF4322.JPG"});
 
 =head3 upload file directly
 
-$res = $fbx->upload_file( {filename => "DSCF4322.JPG", dirname => "/Disque dur/"} );
-
-=head3 downloads config
-
-$fbx->downloads_config;
+$res = $fbx->upload_file( {filename => "DSCF4321.JPG", dirname => "/Disque dur/"} );
 
 =head2 freeplugs
 
@@ -1094,15 +1130,31 @@ $fbx->ftp_config;
 
 =head3 lan config
 
-$fbx->lan_config;
+ $res = $fbx->lan_config;
 
 =head3 lan browser interfaces
 
-$res = $fbx->lan_browser_interfaces;
+ $res = $fbx->lan_browser_interfaces;
 
 =head3 lan browser interfaces pub
 
-$fbx->list_hosts($res->->[0]->{name} );
+ $res = $fbx->list_hosts( $net );
+
+=head3 get host information
+
+ $res = $fbx->list_hosts("$net/$id");
+
+=head3 update host information
+
+ $res = $fbx->upd_host("$net/$id", { id => $id , host_type => "networking_device" });
+
+=head3 update lan config
+
+ $res = $fbx->upd_lan_config( {mode=>"router"} );
+
+=head3 send wol
+
+ $res = $fbx->wol_host( $net, {mac => "B8:27:EB:73:8C:4E"} );
 
 =head2 lcd
 
@@ -1164,7 +1216,7 @@ $fbx->airmedia_receivers;
 
 =head3 netshare samba
 
-$fbx->netshare_samba;
+ $res = $fbx->netshare_samba;
 
 =head3 netshare afp
 
@@ -1184,7 +1236,19 @@ $fbx->storage_partition;
 
 =head3 switch status
 
-$fbx->switch_sts;
+ $res = $fbx->switch_sts;
+
+=head3 switch port config
+
+ $res = $fbx->switch_port(1);
+
+=head3 switch port stats
+
+ $res = $fbx->switch_port("1/stats/");
+
+=head3 set switch port config
+
+ $res = $fbx->set_switch_port(1 , {duplex=>"auto"} );
 
 =head2 system
 
