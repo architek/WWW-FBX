@@ -1,5 +1,4 @@
-parseapi.pl
-myenv.sh
+mine/
 script/full.pl
 /.build/
 /_build/
