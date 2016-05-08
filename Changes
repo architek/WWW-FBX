@@ -1,6 +1,9 @@
 Revision history for Perl extension WWW-FBX
 
 {{$NEXT}}
+    - Finished FS
+    - As we now deref result, any method might return undef. 
+    - As such, some tests are not using ok (they will die on error)
 
 0.09 2016-05-08T13:06:19Z
     - Now dereferencing {result}
