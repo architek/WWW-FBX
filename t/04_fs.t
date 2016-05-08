@@ -25,7 +25,7 @@ eval {
 #  ok($fbx->upd_task(12, state=>"paused"}), "update fs task");
   ok($res = $fbx->list_files("Disque dur/"), "list files");
 #  ok($res = $fbx->file_info("Disque dur/Photos/Sydney/DSCF4323.JPG"), "file info");
-#  ok($res = $fbx->download_file("Disque dur/Photos/cyril/DSCF4322.JPG"), "download RAW file, not JSON!");
+#  ok($res = $fbx->download_file("Disque dur/Photos/cyril/DSCF4322.JPG"), "download RAW file not JSON!");
 };
 
 if ( my $err = $@ ) {
