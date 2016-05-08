@@ -6,6 +6,7 @@ plan skip_all => "FBX_APP_ID, FBX_APP_NAME, FBX_APP_VERSION, FBX_TRACK_ID, FBX_A
     unless $ENV{FBX_APP_ID} and $ENV{FBX_APP_NAME} and $ENV{FBX_APP_VERSION} and $ENV{FBX_TRACK_ID} and $ENV{FBX_APP_TOKEN};
 
 my $fbx;
+my $res;
 
 eval { 
   $fbx = WWW::FBX->new ( 
@@ -18,7 +19,12 @@ eval {
   );
   
   isa_ok $fbx, "WWW::FBX", "switch";
-  ok($fbx->switch_sts, "switch status");
+  ok( $res = $fbx->switch_sts, "switch status"); #diag explain $res;
+  ok( $res = $fbx->switch_port(1), "switch port config"); #diag explain $res;
+  ok( $res = $fbx->switch_port("1/stats/"), "switch port stats"); #diag explain $res;
+  if ($ENV{FBX_FULL_TESTS}) { 
+    ok( $res = $fbx->set_switch_port(1 , {duplex=>"auto"} ), "set switch port config"); diag explain $res;
+  }
 };
 
 if ( my $err = $@ ) {
