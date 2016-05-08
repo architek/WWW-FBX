@@ -872,11 +872,11 @@ The following methods are currently implemented in this library:
 
 =head3 call log
 
-$fbx->call_log;
+ $fbx->call_log;
 
 =head3 contact
 
-$fbx->contact;
+ $fbx->contact;
 
 =head2 connection
 
@@ -890,15 +890,15 @@ $fbx->contact;
 
 =head3 connection ipv6 config
 
-$fbx->connection_ipv6_config;
+ $fbx->connection_ipv6_config;
 
 =head3 connection xdsl
 
-$fbx->connection_xdsl;
+ $fbx->connection_xdsl;
 
 =head3 connection ftth
 
-$fbx->connection_ftth;
+ $fbx->connection_ftth;
 
 =head3 update connection config
 
@@ -910,43 +910,43 @@ $fbx->connection_ftth;
 
 =head3 connection dyndns noip
 
-$res = $fbx->connection_dyndns("noip/status");
+ $res = $fbx->connection_dyndns("noip/status");
 
 =head3 connection dyndns noip
 
-$res = $fbx->upd_connection_dyndns("noip/status", {enabled=>\0});
+ $res = $fbx->upd_connection_dyndns("noip/status", {enabled=>\0});
 
 =head2 dhcp
 
 =head3 dhcp config
 
-$fbx->dhcp_config;
+ $fbx->dhcp_config;
 
 =head3 dhcp static lease
 
-$fbx->dhcp_static_lease;
+ $fbx->dhcp_static_lease;
 
 =head3 dhcp dynamic lease
 
-$fbx->dhcp_dynamic_lease;
+ $fbx->dhcp_dynamic_lease;
 
 =head2 download
 
 =head3 downloads
 
-$fbx->downloads;
+ $fbx->downloads;
 
 =head3 downloads config
 
-$fbx->downloads_config;
+ $fbx->downloads_config;
 
 =head3 downloads stats
 
-$fbx->downloads_stats;
+ $fbx->downloads_stats;
 
 =head3 download feeds
 
-$fbx->downloads_feeds;
+ $fbx->downloads_feeds;
 
 =head3 downloads config
 
@@ -962,11 +962,11 @@ $fbx->downloads_feeds;
 
 =head3 update downloads config
 
-$res = $fbx->upd_downloads_config({max_downloading_tasks => $max_dl_tasks});
+ $res = $fbx->upd_downloads_config({max_downloading_tasks => $max_dl_tasks});
 
 =head3 update throttling
 
-$res = $fbx->upd_downloads_throttle( "schedule" );
+ $res = $fbx->upd_downloads_throttle( "schedule" );
 
 =head3 download tasks
 
@@ -974,157 +974,157 @@ $res = $fbx->upd_downloads_throttle( "schedule" );
 
 =head3 download task
 
-$res = $fbx->get_download_task( $id );
+ $res = $fbx->get_download_task( $id );
 
 =head3 download task log
 
-$res = $fbx->get_download_task( "$id/log" );
+ $res = $fbx->get_download_task( "$id/log" );
 
 =head3 downloads update
 
-$fbx->upd_download_task( $id, { io_priority => "high" } );
+ $fbx->upd_download_task( $id, { io_priority => "high" } );
 
 =head3 get download task files
 
-$res = $fbx->get_download_task("$id/files") ;
+ $res = $fbx->get_download_task("$id/files") ;
 
 =head3 update priority of download file
 
-$res = $fbx->change_prio_download_file( "$id/files/$id_file", { priority=>"high"} );
+ $res = $fbx->change_prio_download_file( "$id/files/$id_file", { priority=>"high"} );
 
 =head3 downloads task del
 
-$res = $fbx->del_download_task( $id );
+ $res = $fbx->del_download_task( $id );
 
 =head3 download add by local file
 
-$res = $fbx->add_download_task_file( {download_file => [ "mine/debian-8.4.0-arm64-netinst.iso.torrent" ] });
+ $res = $fbx->add_download_task_file( {download_file => [ "mine/debian-8.4.0-arm64-netinst.iso.torrent" ] });
 
 =head3 download tracker
 
-$res = $fbx->get_download_task( "$id/trackers");
+ $res = $fbx->get_download_task( "$id/trackers");
 
 =head3 download peers
 
-$res = $fbx->get_download_task( "$id/peers");
+ $res = $fbx->get_download_task( "$id/peers");
 
 =head3 downloads task del with file erase
 
-$fbx->del_download_task( "$id/erase" );
+ $fbx->del_download_task( "$id/erase" );
 
 =head3 download feed
 
-$res = $fbx->downloads_feeds;
+ $res = $fbx->downloads_feeds;
 
 =head3 add feed
 
-$res = $fbx->add_feed( "http://www.esa.int/rssfeed/Our_Activities/Space_News" );
+ $res = $fbx->add_feed( "http://www.esa.int/rssfeed/Our_Activities/Space_News" );
 
 =head3 update feed
 
-$fbx->upd_feed( $id , {auto_download=> \1} );
+ $fbx->upd_feed( $id , {auto_download=> \1} );
 
 =head3 download feed
 
-$res = $fbx->downloads_feeds("$id/items");
+ $res = $fbx->downloads_feeds("$id/items");
 
 =head3 refresh feed
 
-$fbx->refresh_feed( "$id/fetch" );
+ $fbx->refresh_feed( "$id/fetch" );
 
 =head3 refresh all feeds
 
-$fbx->refresh_feeds;
+ $fbx->refresh_feeds;
 
 =head3 download feed items
 
-$fbx->downloads_feeds("$id/items");
+ $fbx->downloads_feeds("$id/items");
 
 =head3 update a feed item
 
-$fbx->upd_feed("$id/items/$id_file");
+ $fbx->upd_feed("$id/items/$id_file");
 
 =head3 download a feed item
 
-$fbx->download_feed_item("$id/items/$id_file/download");
+ $fbx->download_feed_item("$id/items/$id_file/download");
 
 =head3 mark all items as read
 
-$fbx->mark_all_read( "$id/items/mark_all_as_read" );
+ $fbx->mark_all_read( "$id/items/mark_all_as_read" );
 
 =head3 del feed
 
-$fbx->del_feed( $id );
+ $fbx->del_feed( $id );
 
 =head3 download file to disk
 
-$res = $fbx->download_file( "Disque dur/Photos/cyril/DSCF4322.JPG" );
+ $res = $fbx->download_file( "Disque dur/Photos/cyril/DSCF4322.JPG" );
 
 =head3 download file to disk
 
-$res = $fbx->download_file( "Disque dur/Photos/cyril/DSCF4321.JPG" );
+ $res = $fbx->download_file( "Disque dur/Photos/cyril/DSCF4321.JPG" );
 
 =head3 get upload id
 
-$res = $fbx->upload_auth( {upload_name => "DSCF4322.JPG", dirname => "/Disque dur/"} );
+ $res = $fbx->upload_auth( {upload_name => "DSCF4322.JPG", dirname => "/Disque dur/"} );
 
 =head3 upload file by upload id
 
-$res = $fbx->upload_file( {id=> $res->{id}, filename=>"DSCF4322.JPG"});
+ $res = $fbx->upload_file( {id=> $res->{id}, filename=>"DSCF4322.JPG"});
 
 =head3 upload file directly
 
-$res = $fbx->upload_file( {filename => "DSCF4321.JPG", dirname => "/Disque dur/"} );
+ $res = $fbx->upload_file( {filename => "DSCF4321.JPG", dirname => "/Disque dur/"} );
 
 =head2 freeplugs
 
 =head3 list freeplugs
 
-$fbx->freeplugs_net;
+ $fbx->freeplugs_net;
 
 =head3 get a particular freeplugs
 
-$fbx->freeplugs_net("F4:CA:E5:1D:46:AE");
+ $fbx->freeplugs_net("F4:CA:E5:1D:46:AE");
 
 =head3 reset freeplug
 
-$fbx->reset_freeplug("F4:CA:E5:1D:46:AE");
+ $fbx->reset_freeplug("F4:CA:E5:1D:46:AE");
 
 =head2 fs
 
 =head3 fs tasks
 
-$fbx->fs_tasks;
+ $fbx->fs_tasks;
 
 =head3 fs task
 
-$fbx->fs_tasks(12);
+ $fbx->fs_tasks(12);
 
 =head3 del fs task
 
-$fbx->del_task(12);
+ $fbx->del_task(12);
 
 =head3 update fs task
 
-$fbx->upd_task(12, state=>"paused"});
+ $fbx->upd_task(12, state=>"paused"});
 
 =head3 list files
 
-$res = $fbx->list_files("Disque dur/");
+ $res = $fbx->list_files("Disque dur/");
 
 =head3 file info
 
-$res = $fbx->file_info("Disque dur/Photos/Sydney/DSCF4323.JPG");
+ $res = $fbx->file_info("Disque dur/Photos/Sydney/DSCF4323.JPG");
 
-=head3  not JSON!
+=head3 download RAW file not JSON!
 
-$res = $fbx->download_file("Disque dur/Photos/cyril/DSCF4322.JPG"), "download RAW file;
+ $res = $fbx->download_file("Disque dur/Photos/cyril/DSCF4322.JPG");
 
 =head2 ftp
 
 =head3 ftp config
 
-$fbx->ftp_config;
+ $fbx->ftp_config;
 
 =head2 lan
 
@@ -1160,57 +1160,57 @@ $fbx->ftp_config;
 
 =head3 lcd
 
-$res = $fbx->lcd;
+ $res = $fbx->lcd;
 
 =head3 lcd brightness back
 
-$fbx->set_lcd({ brightness => $res->{brightness} });
+ $fbx->set_lcd({ brightness => $res->{brightness} });
 
 =head2 nat
 
 =head3 fw dmz
 
-$fbx->fw_dmz;
+ $fbx->fw_dmz;
 
 =head3 fw redir
 
-$fbx->fw_redir;
+ $fbx->fw_redir;
 
 =head3 fw incoming
 
-$fbx->fw_incoming;
+ $fbx->fw_incoming;
 
 =head2 parental
 
 =head3 parental config
 
-$fbx->parental_config;
+ $fbx->parental_config;
 
 =head3 parental filter
 
-$fbx->parental_filter;
+ $fbx->parental_filter;
 
 =head2 share
 
 =head3 share link
 
-$fbx->share_link;
+ $fbx->share_link;
 
 =head3 upload status
 
-$fbx->upload;
+ $fbx->upload;
 
 =head3 upload status of a task
 
-$fbx->upload(1);
+ $fbx->upload(1);
 
 =head3 airmedia config
 
-$fbx->airmedia_config;
+ $fbx->airmedia_config;
 
 =head3 airmedia receivers
 
-$fbx->airmedia_receivers;
+ $fbx->airmedia_receivers;
 
 =head2 shares
 
@@ -1220,17 +1220,17 @@ $fbx->airmedia_receivers;
 
 =head3 netshare afp
 
-$fbx->netshare_afp;
+ $fbx->netshare_afp;
 
 =head2 storage
 
 =head3 storage disk
 
-$fbx->storage_disk;
+ $fbx->storage_disk;
 
 =head3 storage partition
 
-$fbx->storage_partition;
+ $fbx->storage_partition;
 
 =head2 switch
 
@@ -1254,79 +1254,79 @@ $fbx->storage_partition;
 
 =head3 get system info
 
-$fbx->system;
+ $fbx->system;
 
 =head3 reboot system
 
-$fbx->reboot;
+ $fbx->reboot;
 
 =head2 upnp
 
 =head3 upnpigd config
 
-$fbx->upnpigd_config;
+ $fbx->upnpigd_config;
 
 =head3 upnpigd redir
 
-$fbx->upnpigd_redir;
+ $fbx->upnpigd_redir;
 
 =head2 upnpav
 
 =head3 upnpav
 
-$res=$fbx->upnpav;
+ $res=$fbx->upnpav;
 
 =head3 set upnpav
 
-$fbx->set_upnpav($res->{enabled});
+ $fbx->set_upnpav($res->{enabled});
 
 =head2 vpn
 
 =head3 vpn
 
-$fbx->vpn;
+ $fbx->vpn;
 
 =head3 vpn user
 
-$fbx->vpn_user;
+ $fbx->vpn_user;
 
 =head3 vpn ip_pool
 
-$fbx->vpn_ip_pool;
+ $fbx->vpn_ip_pool;
 
 =head3 vpn client config
 
-$fbx->vpn_client_config;
+ $fbx->vpn_client_config;
 
 =head3 vpn client status
 
-$fbx->vpn_client_status;
+ $fbx->vpn_client_status;
 
 =head3 vpn client log
 
-$fbx->vpn_client_log;
+ $fbx->vpn_client_log;
 
 =head2 wifi
 
 =head3 wifi config
 
-$fbx->wifi_config;
+ $fbx->wifi_config;
 
 =head3 wifi ap
 
-$fbx->wifi_ap;
+ $fbx->wifi_ap;
 
 =head3 wifi bss
 
-$fbx->wifi_bss;
+ $fbx->wifi_bss;
 
 =head3 wifi planning
 
-$fbx->wifi_planning;
+ $fbx->wifi_planning;
 
 =head3 wifi mac filter
 
-$fbx->wifi_mac_filter;
+ $fbx->wifi_mac_filter;
 
 =head1 LICENSE
 
