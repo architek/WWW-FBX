@@ -50,7 +50,7 @@ sub _json_request {
     #And HTTP response RAW
     $self->uarh( $res );
 
-    return $self->uar->{result} ? $self->uar->{result} : {} ;
+    return $self->uar->{result};
 }
  
 sub _prepare_request {
