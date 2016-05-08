@@ -23,13 +23,15 @@ eval {
   isa_ok $fbx, "WWW::FBX", "connection";
   ok( $res = $fbx->connection, "connection"); #diag explain $res;
   ok( $res = $fbx->connection_config, "connection config"); #diag explain $res;
-  ok( $res = $fbx->upd_connection({ping=>\1}), "update connection config"); #diag explain $res;
   ok($fbx->connection_ipv6_config, "connection ipv6 config");
-  ok( $res = $fbx->upd_ipv6_config({ipv6_enabled=>\0}), "update connection ipv6 config"); #diag explain $res;
   ok($fbx->connection_xdsl, "connection xdsl");
   ok($fbx->connection_ftth, "connection ftth");
-  ok($res = $fbx->connection_dyndns("noip/status"), "connection dyndns noip"); diag explain $res;
-  ok($res = $fbx->upd_connection_dyndns("noip/status", {enabled=>\0}), "connection dyndns noip"); #diag explain $res;
+  if ($ENV{FBX_FULL_TESTS}) { 
+    ok( $res = $fbx->upd_connection({ping=>\1}), "update connection config"); #diag explain $res; 
+    ok( $res = $fbx->upd_ipv6_config({ipv6_enabled=>\0}), "update connection ipv6 config"); #diag explain $res; 
+    ok($res = $fbx->connection_dyndns("noip/status"), "connection dyndns noip"); diag explain $res; 
+    ok($res = $fbx->upd_connection_dyndns("noip/status", {enabled=>\0}), "connection dyndns noip"); #diag explain $res;
+  }
 };
 
 if ( my $err = $@ ) {
