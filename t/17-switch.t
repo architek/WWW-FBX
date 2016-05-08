@@ -23,7 +23,7 @@ eval {
   ok( $res = $fbx->switch_port(1), "switch port config"); #diag explain $res;
   ok( $res = $fbx->switch_port("1/stats/"), "switch port stats"); #diag explain $res;
   if ($ENV{FBX_FULL_TESTS}) { 
-    ok( $res = $fbx->set_switch_port(1 , {duplex=>"auto"} ), "set switch port config"); diag explain $res;
+    ok( $res = $fbx->set_switch_port(1 , {duplex=>"auto"} ), "set switch port config"); #diag explain $res;
   }
 };
 

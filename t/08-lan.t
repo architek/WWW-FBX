@@ -31,7 +31,7 @@ eval {
   if ($ENV{FBX_FULL_TESTS}) {
     ok( $res = $fbx->upd_host("$net/$id", { id => $id , host_type => "networking_device" }), "update host information"); #diag explain $res;
     ok( $res = $fbx->upd_lan_config( {mode=>"router"} ), "update lan config"); #diag explain $res;
-    ok( $res = $fbx->wol_host( $net, {mac => "B8:27:EB:73:8C:4E"} ), "send wol"); #diag explain $res;
+    ok( $res = $fbx->wol_host( $net, {mac => "B8:27:EB:73:8C:4E"} )||1, "send wol"); #diag explain $res;
   }
 };
 

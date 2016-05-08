@@ -19,7 +19,7 @@ eval {
   );
   
   isa_ok $fbx, "WWW::FBX", "shares";
-  ok( $res = $fbx->netshare_samba,"netshare samba"); diag explain $res;
+  ok( $res = $fbx->netshare_samba,"netshare samba"); #diag explain $res;
   ok($fbx->netshare_afp,"netshare afp");
 };
 

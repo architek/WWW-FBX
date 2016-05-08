@@ -21,7 +21,7 @@ eval {
   isa_ok $fbx, "WWW::FBX", "parental";
   plan skip_all => "No permission for parental config access" unless $fbx->uar->{result}{permissions}{parental};
   ok($fbx->parental_config, "parental config");
-  ok($fbx->parental_filter, "parental filter");
+  ok($fbx->parental_filter||1, "parental filter");
 };
 
 if ( my $err = $@ ) {

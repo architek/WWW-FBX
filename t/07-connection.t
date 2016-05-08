@@ -29,7 +29,7 @@ eval {
   if ($ENV{FBX_FULL_TESTS}) { 
     ok( $res = $fbx->upd_connection({ping=>\1}), "update connection config"); #diag explain $res; 
     ok( $res = $fbx->upd_ipv6_config({ipv6_enabled=>\0}), "update connection ipv6 config"); #diag explain $res; 
-    ok($res = $fbx->connection_dyndns("noip/status"), "connection dyndns noip"); diag explain $res; 
+    ok($res = $fbx->connection_dyndns("noip/status"), "connection dyndns noip"); #diag explain $res; 
     ok($res = $fbx->upd_connection_dyndns("noip/status", {enabled=>\0}), "connection dyndns noip"); #diag explain $res;
   }
 };
