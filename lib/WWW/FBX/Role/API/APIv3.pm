@@ -346,7 +346,153 @@ around file_info => sub {
   $params;
 };
 
-#TODO mv, cp, rm, cat, archive, extract, repair, hash, mkdir, rename
+fbx_api_method mv => (
+  description => <<'',
+Move files.
+
+  path => "fs/mv/",
+  method => 'POST',
+  params => [ qw/files dst mode/ ],
+  required => [ qw/files dst mode/ ],
+);
+
+fbx_api_method cp => (
+  description => <<'',
+Copy files.
+
+  path => "fs/cp/",
+  method => 'POST',
+  params => [ qw/files dst mode/ ],
+  required => [ qw/files dst mode/ ],
+);
+
+fbx_api_method archive => (
+  description => <<'',
+Create an archive.
+
+  path => "fs/mv/",
+  method => 'POST',
+  params => [ qw/files dst/ ],
+  required => [ qw/files dst/ ],
+);
+
+around [qw/cp mv archive/] => sub {
+  my $orig = shift;
+  my $self = shift;
+  my $params = shift;
+
+  $params->{$_} = encode_base64( $params->{$_},"") for qw/dst/;
+  $params->{files}->[$_] = encode_base64( $params->{files}->[$_],"") for 0..$#{$params->{files}};
+  
+  $self->$orig($params);
+};
+
+fbx_api_method rm => (
+  description => <<'',
+Delete files.
+
+  path => "fs/rm/",
+  method => 'POST',
+  params => [ qw/files/ ],
+  required => [ qw/files/ ],
+);
+
+around [qw/rm cat/] => sub {
+  my $orig = shift;
+  my $self = shift;
+  my $params = shift;
+
+  $params->{files}->[$_] = encode_base64( $params->{files}->[$_],"") for 0..$#{$params->{files}};
+  
+  $self->$orig($params);
+};
+
+fbx_api_method cat => (
+  description => <<'',
+Cat files.
+
+  path => "fs/cat/",
+  method => 'POST',
+  params => [ qw/files dst multi_volumes delete_files overwrite append/ ],
+  required => [ qw/files dst/ ],
+);
+
+fbx_api_method extract => (
+  description => <<'',
+Extract archive.
+
+  path => "fs/extract/",
+  method => 'POST',
+  params => [ qw/src dst password delete_archive overwrite/ ],
+  required => [ qw/src dst password delete_archive overwrite/ ],
+);
+
+around [qw/extract/] => sub {
+  my $orig = shift;
+  my $self = shift;
+  my $params = shift;
+
+  $params->{$_} = encode_base64( $params->{$_},"") for qw/src dst/;
+  $self->$orig($params);
+};
+
+fbx_api_method repair => (
+  description => <<'',
+Repair file.
+
+  path => "fs/repair/",
+  method => 'POST',
+  params => [ qw/src delete_archive / ],
+  required => [ qw/src delete_archive/ ],
+);
+
+fbx_api_method hash => (
+  description => <<'',
+Repair file.
+
+  path => "fs/hash/",
+  method => 'POST',
+  params => [ qw/src hash_type/ ],
+  required => [ qw/src hash_type/ ],
+);
+
+around [qw/repair hash rename/] => sub {
+  my $orig = shift;
+  my $self = shift;
+  my $params = shift;
+
+  $params->{$_} = encode_base64( $params->{$_},"") for qw/src/;
+  $self->$orig($params);
+};
+
+fbx_api_method mkdir => (
+  description => <<'',
+Create directory.
+
+  path => "fs/mkdir/",
+  method => 'POST',
+  params => [ qw/parent dirname/ ],
+  required => [ qw/parent dirname/ ],
+);
+
+around [qw/mkdir/] => sub {
+  my $orig = shift;
+  my $self = shift;
+  my $params = shift;
+
+  $params->{$_} = encode_base64( $params->{$_},"") for qw/parent/;
+  $self->$orig($params);
+};
+
+fbx_api_method rename => (
+  description => <<'',
+Rename file or directory.
+
+  path => "fs/rename/",
+  method => 'POST',
+  params => [ qw/src dst/ ],
+  required => [ qw/src dst/ ],
+);
 
 fbx_api_method download_file => (
   description => <<'',
