@@ -634,6 +634,7 @@ Global DHCP getters.
   params => [ ],
   required => [ ],
 ) for qw(dhcp/config dhcp/static_lease dhcp/dynamic_lease);
+#TODO finish
 
 #FTP
 
@@ -667,6 +668,7 @@ Global NAT getters.
   params => [ ],
   required => [ ],
 ) for qw(fw/dmz fw/redir/ fw/incoming/);
+#TODO rest
 
 #UPNP
 fbx_api_method s'/'_'gr => (
@@ -678,6 +680,7 @@ Global UPNP getters.
   params => [ ],
   required => [ ],
 ) for qw(upnpigd/config upnpigd/redir/);
+#TODO rest
 
 #LCD
 fbx_api_method lcd => (
@@ -709,6 +712,7 @@ Global Network Shares getters.
   params => [ ],
   required => [ ],
 ) for qw(netshare/samba netshare/afp);
+#TODO rest
 
 #UPNPAV
 fbx_api_method upnpav => (
@@ -741,6 +745,26 @@ Get the switch status.
   required => [ ],
 );
 
+fbx_api_method switch_port => (
+  description => <<'',
+Get the switch port config and status.
+
+  path => 'switch/port/',
+  method => 'GET',
+  params => [ qw/suff/ ],
+  required => [ qw/suff/ ],
+);
+
+fbx_api_method set_switch_port => (
+  description => <<'',
+Update a port config.
+
+  path => 'switch/port/',
+  method => 'PUT',
+  params => [ qw/suff duplex speed/ ],
+  required => [ qw/suff/ ],
+);
+
 #wifi
 fbx_api_method s'/'_'gr => (
   description => <<'',
@@ -751,6 +775,8 @@ Global Wifi getters.
   params => [ ],
   required => [ ],
 ) for qw(wifi/config wifi/ap wifi/bss wifi/planning wifi/mac_filter);
+
+#TODO finish
 
 #System
 fbx_api_method system => (
@@ -794,6 +820,7 @@ Global VPN client getters.
   params => [ ],
   required => [ ],
 ) for qw(vpn_client/config/ vpn_client/status vpn_client/log);
+#TODO finish
 
 #Storage
 fbx_api_method s'/'_'gr => (
@@ -805,6 +832,7 @@ Global storage getters.
   params => [ ],
   required => [ ],
 ) for qw(storage/disk/ storage/partition/);
+#TODO finish
 
 #Parental
 fbx_api_method s'/'_'gr => (
@@ -816,7 +844,7 @@ Global parental getters.
   params => [ ],
   required => [ ],
 ) for qw(parental/config/ parental/filter/);
-
+#TODO finish
 
 1;
 __END__
