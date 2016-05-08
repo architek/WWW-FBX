@@ -563,6 +563,16 @@ Global Lan getters.
   required => [],
 ) for qw(lan/config lan/browser/interfaces);
 
+fbx_api_method upd_lan_config => (
+  description => <<'',
+Update lan config.
+
+  path => 'lan/config/',
+  method => 'PUT',
+  params => [ qw/mode ip name name_dns name_mdns name_netbios/ ],
+  required => [ qw// ],
+);
+
 fbx_api_method list_hosts => (
   description => <<'',
 Get the list of hosts on a given interface.
@@ -571,6 +581,26 @@ Get the list of hosts on a given interface.
   method => 'GET',
   params => [ qw/suff/ ],
   required => [ qw/suff/ ],
+);
+
+fbx_api_method upd_host => (
+  description => <<'',
+Update a host config.
+
+  path => 'lan/browser/',
+  method => 'PUT',
+  params => [ qw/suff id primary_name host_type persistent / ],
+  required => [ qw/suff id/ ],
+);
+
+fbx_api_method wol_host => (
+  description => <<'',
+Send a WoL.
+
+  path => 'lan/wol/',
+  method => 'POST',
+  params => [ qw/suff mac password/ ],
+  required => [ qw/suff mac/ ],
 );
 
 #Freeplugs
