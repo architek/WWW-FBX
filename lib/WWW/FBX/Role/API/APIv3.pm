@@ -370,7 +370,7 @@ fbx_api_method archive => (
   description => <<'',
 Create an archive.
 
-  path => "fs/mv/",
+  path => "fs/archive/",
   method => 'POST',
   params => [ qw/files dst/ ],
   required => [ qw/files dst/ ],
@@ -1261,6 +1261,46 @@ The following methods are currently implemented in this library:
 =head3 file info
 
  $res = $fbx->file_info("Disque dur/Photos/Sydney/DSCF4323.JPG");
+
+=head3 file move
+
+ $res = $fbx->mv( {files=>[ qw/a.txt b.txt/ ], dst => "/Disque dur/directory", mode => "overwrite" } );
+
+=head3 file cp
+
+ $res = $fbx->cp( {files=>[ qw/a.txt b.txt/ ], dst => "/Disque dur/directory", mode => "overwrite" } );
+
+=head3 file archive
+
+ $res = $fbx->archive( {files=>[ qw/a.txt b.txt/ ], dst => "/Disque dur/archive.zip", mode => "overwrite" } );
+
+=head3 file rm
+
+ $res = $fbx->rm( {files=>[ qw/a.txt b.txt/ ] } );
+
+=head3 file cat
+
+ $res = $fbx->cat( {files=>[ qw/a.txt b.txt/ ], dst=>"/Disque dur/file", multi_volumes=\0, delete_files=>\0, append=>\1, overwrite=>\0 } );
+
+=head3 file extract
+
+ $res = $fbx->cat( { src => "foo.iso", dst=>"/Disque dur/directory", password =>"", delete_archive=>\0, overwrite=>\0 } );
+
+=head3 file repair
+
+ $res = $fbx->repair( { src => "foo.iso.par2", delete_archive=>\0 } );
+
+=head3 file hash
+
+ $res = $fbx->hash( { src => "foo.iso", hash_type=>"md5" } );
+
+=head3 mkdir
+
+ $res = $fbx->mkdir( { parent => "/Disque dur/", dirname => "directory" } );
+
+=head3 rename
+
+ $res = $fbx->rename( { src => "/Disque dur/a.txt", dst => "b.txt' } );
 
 =head3 download RAW file not JSON!
 
