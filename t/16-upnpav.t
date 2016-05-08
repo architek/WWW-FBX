@@ -20,7 +20,7 @@ eval {
   
   isa_ok $fbx, "WWW::FBX", "upnpav";
   ok($res=$fbx->upnpav, "upnpav");
-  ok($fbx->set_upnpav($res->{result}{enabled}), "set upnpav");
+  ok($fbx->set_upnpav($res->{enabled}), "set upnpav");
 };
 
 if ( my $err = $@ ) {

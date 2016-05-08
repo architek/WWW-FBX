@@ -23,9 +23,9 @@ eval {
   isa_ok $fbx, "WWW::FBX", "lan";
   ok( $res = $fbx->lan_config, "lan config"); #diag explain $res;
   ok( $res = $fbx->lan_browser_interfaces, "lan browser interfaces");
-  $net = $res->{result}->[0]->{name};
+  $net = $res->[0]->{name};
   ok( $res = $fbx->list_hosts( $net ), "lan browser interfaces pub"); #diag explain $res;
-  $id = $res->{result}->[0]->{id};
+  $id = $res->[0]->{id};
   ok( $res = $fbx->list_hosts("$net/$id"), "get host information"); #diag explain $res;
 
   if ($ENV{FBX_FULL_TESTS}) {

@@ -234,7 +234,7 @@ around downloads_config => sub {
   my $params = $self->$orig(@_);
 
   for (qw/download_dir watch_dir/) {
-    $params->{result}{$_} = decode_base64( $params->{result}{$_} ) if exists $params->{result}{$_} and $params->{result}{$_};
+    $params->{$_} = decode_base64( $params->{$_} ) if exists $params->{$_} and $params->{$_};
   }
 
   $params;
@@ -313,8 +313,8 @@ around list_files => sub {
   $params = encode_base64( $params, "") if $params;
   my $res = $self->$orig($params);
 
-  for my $i ( 0.. $#{$res->{result}} ) {
-    $res->{result}->[$i]{path} = decode_base64( $res->{result}[$i]{path} );
+  for my $i ( 0.. $#{$res} ) {
+    $res->[$i]{path} = decode_base64( $res->[$i]{path} );
   }
 
   $res;
@@ -340,7 +340,7 @@ around file_info => sub {
   my $res = $self->$orig($params);
 
   for (qw/parent target path/) {
-    $params->{result}{$_} = decode_base64( $params->{result}{$_} ) if exists $params->{result}{$_} and $params->{result}{$_};
+    $params->{$_} = decode_base64( $params->{$_} ) if exists $params->{$_} and $params->{$_};
   }
 
   $params;
@@ -448,7 +448,7 @@ around upload_file => sub {
       my $res = $self->upload_auth(@_);
       delete $params->{dirname};
       delete $params->{upload_name};
-      $id = $res->{result}{id};
+      $id = $res->{id};
     }
     $params->{name} = [ $filename ];
     $params->{suff} = "$id/send";
@@ -1030,7 +1030,7 @@ $res = $fbx->upload_auth( {upload_name => "DSCF4322.JPG", dirname => "/Disque du
 
 =head3 upload file by upload id
 
-$res = $fbx->upload_file( {id=> $res->{result}{id}, filename=>"DSCF4322.JPG"});
+$res = $fbx->upload_file( {id=> $res->{id}, filename=>"DSCF4322.JPG"});
 
 =head3 upload file directly
 
@@ -1102,7 +1102,7 @@ $res = $fbx->lan_browser_interfaces;
 
 =head3 lan browser interfaces pub
 
-$fbx->list_hosts($res->{result}->[0]->{name} );
+$fbx->list_hosts($res->->[0]->{name} );
 
 =head2 lcd
 
@@ -1112,7 +1112,7 @@ $res = $fbx->lcd;
 
 =head3 lcd brightness back
 
-$fbx->set_lcd({ brightness => $res->{result}{brightness} });
+$fbx->set_lcd({ brightness => $res->{brightness} });
 
 =head2 nat
 
@@ -1214,7 +1214,7 @@ $res=$fbx->upnpav;
 
 =head3 set upnpav
 
-$fbx->set_upnpav($res->{result}{enabled});
+$fbx->set_upnpav($res->{enabled});
 
 =head2 vpn
 

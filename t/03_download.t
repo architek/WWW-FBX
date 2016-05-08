@@ -30,34 +30,34 @@ eval {
     my $max_dl_tasks;
 
     ok( $res = $fbx->downloads_config, "downloads config"); #diag explain $res;
-    $max_dl_tasks = $res->{result}{max_downloading_tasks}; #diag("Max dl is $max_dl_tasks");
+    $max_dl_tasks = $res->{max_downloading_tasks}; #diag("Max dl is $max_dl_tasks");
     ok( $res = $fbx->get_download_task, "download tasks"); diag explain $res;
     ok( $res = $fbx->add_download_task( { download_url => "http://cdimage.debian.org/debian-cd/current/arm64/bt-cd/debian-8.4.0-arm64-CD-1.iso.torrent"} ), "download add"); diag explain $res;
     ok($res = $fbx->upd_downloads_config({max_downloading_tasks => $max_dl_tasks}), "update downloads config"); #diag explain $res;
     ok($res = $fbx->upd_downloads_throttle( "schedule" ), "update throttling"); diag "Upd throttle";
     sleep 7;
     ok( $res = $fbx->get_download_task, "download tasks"); diag explain $res;
-    $id = $res->{result}->[0]->{id}; diag("id is $id");
+    $id = $res->[0]->{id}; diag("id is $id");
     ok($res = $fbx->get_download_task( $id ), "download task"); diag "download task";
     ok($res = $fbx->get_download_task( "$id/log" ), "download task log");  diag "download task log";
     ok($fbx->upd_download_task( $id, { io_priority => "high" } ), "downloads update"); diag "upd task";
     ok($res = $fbx->get_download_task("$id/files") , "get download task files");
-    $id_file = $res->{result}->[0]->{id};
+    $id_file = $res->[0]->{id};
     ok($res = $fbx->change_prio_download_file( "$id/files/$id_file", { priority=>"high"} ), "update priority of download file"); diag "Prio";
     ok($res = $fbx->del_download_task( $id ), "downloads task del"); diag explain $res;
-    ok($res = $fbx->add_download_task_file( {download_file => [ "debian-8.4.0-arm64-netinst.iso.torrent" ] }), "download add by local file");
-    $id = $res->{result}{id}; #diag("id is $id");
+    ok($res = $fbx->add_download_task_file( {download_file => [ "mine/debian-8.4.0-arm64-netinst.iso.torrent" ] }), "download add by local file");
+    $id = $res->{id}; #diag("id is $id");
     ok($res = $fbx->get_download_task( "$id/trackers"), "download tracker");
     ok($res = $fbx->get_download_task( "$id/peers"), "download peers");
     ok($fbx->del_download_task( "$id/erase" ), "downloads task del with file erase");
 
     ok($res = $fbx->downloads_feeds, "download feed"); diag explain $res;
     ok($res = $fbx->add_feed( "http://www.esa.int/rssfeed/Our_Activities/Space_News" ), "add feed");
-    $id = $res->{result}{id}; 
+    $id = $res->{id}; 
     ok($fbx->upd_feed( $id , {auto_download=> \1} ), "update feed");
     sleep 1;
     ok($res = $fbx->downloads_feeds("$id/items"), "download feed"); diag explain $res;
-    $id_file = $res->{result}->[0]->{id}; diag "id file is $id_file";
+    $id_file = $res->[0]->{id}; diag "id file is $id_file";
 #    ok($fbx->refresh_feed( "$id/fetch" ), "refresh feed");
     ok($fbx->refresh_feeds, "refresh all feeds");
     ok($fbx->downloads_feeds("$id/items"), "download feed items");
@@ -68,7 +68,7 @@ eval {
     ok($res = $fbx->download_file( "Disque dur/Photos/cyril/DSCF4322.JPG" ), "download file to disk");
     ok($res = $fbx->download_file( "Disque dur/Photos/cyril/DSCF4321.JPG" ), "download file to disk");
     ok($res = $fbx->upload_auth( {upload_name => "DSCF4322.JPG", dirname => "/Disque dur/"} ), "get upload id");
-    ok($res = $fbx->upload_file( {id=> $res->{result}{id}, filename=>"DSCF4322.JPG"}), "upload file by upload id");
+    ok($res = $fbx->upload_file( {id=> $res->{id}, filename=>"DSCF4322.JPG"}), "upload file by upload id");
     ok($res = $fbx->upload_file( {filename => "DSCF4321.JPG", dirname => "/Disque dur/"} ), "upload file directly");
   }
 

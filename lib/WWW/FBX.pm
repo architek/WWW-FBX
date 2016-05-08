@@ -50,7 +50,7 @@ sub _json_request {
     #And HTTP response RAW
     $self->uarh( $res );
 
-    return $self->uar;
+    return $self->uar->{result} ? $self->uar->{result} : {} ;
 }
  
 sub _prepare_request {
@@ -114,7 +114,7 @@ sub _parse_result {
 
     #API Download file does not return JSON!!
     #If answer is 200 and not json, return unchanged (but still pack it in an HashRef for uar type check..)
-    return {filename => $res->filename, content => $content} if $res->filename and $res->is_success;
+    return { result => { filename => $res->filename, content => $content } } if $res->filename and $res->is_success;
 
     #Else die on HTTP failures, which might contain a json response or not
     my $error = WWW::FBX::Error->new(http_response => $res);
@@ -166,7 +166,7 @@ Authentication is provided through the Auth role but other authentication mechan
         }
 
         $res = $fbx->connection;
-        print "Your ", $res->{result}{media}, " internet connection state is ", $res->{result}{state}, "\n";
+        print "Your ", $res->{media}, " internet connection state is ", $res->{state}, "\n";
         $fbx->set_ftp_config( {enabled => \1} );
         $fbx->reset_freeplug( {suff=>"F4:CA:E5:DE:AD:BE/reset/"} );
     };

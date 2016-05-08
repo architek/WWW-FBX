@@ -24,7 +24,7 @@ eval {
   ok($res = $fbx->lcd, "lcd");
   diag "Look at your lcd";
   $fbx->set_lcd({ brightness => $_ }) for 0..100;
-  ok($fbx->set_lcd({ brightness => $res->{result}{brightness} }), "lcd brightness back");
+  ok($fbx->set_lcd({ brightness => $res->{brightness} }), "lcd brightness back");
 };
 
 if ( my $err = $@ ) {
