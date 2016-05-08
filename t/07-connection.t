@@ -6,6 +6,7 @@ plan skip_all => "FBX_APP_ID, FBX_APP_NAME, FBX_APP_VERSION, FBX_TRACK_ID, FBX_A
     unless $ENV{FBX_APP_ID} and $ENV{FBX_APP_NAME} and $ENV{FBX_APP_VERSION} and $ENV{FBX_TRACK_ID} and $ENV{FBX_APP_TOKEN};
 
 my $fbx;
+my $res;
 
 diag "Sleeping 1s to avoid 503 error on invalid token" && sleep 1;
 
@@ -20,12 +21,15 @@ eval {
   );
   
   isa_ok $fbx, "WWW::FBX", "connection";
-  ok($fbx->connection, "connection");
-  ok($fbx->connection_config, "connection config");
+  ok( $res = $fbx->connection, "connection"); #diag explain $res;
+  ok( $res = $fbx->connection_config, "connection config"); #diag explain $res;
+  ok( $res = $fbx->upd_connection({ping=>\1}), "update connection config"); #diag explain $res;
   ok($fbx->connection_ipv6_config, "connection ipv6 config");
+  ok( $res = $fbx->upd_ipv6_config({ipv6_enabled=>\0}), "update connection ipv6 config"); #diag explain $res;
   ok($fbx->connection_xdsl, "connection xdsl");
   ok($fbx->connection_ftth, "connection ftth");
-  ok($fbx->connection_dyndns("noip/status"), "connection dyndns noip");
+  ok($res = $fbx->connection_dyndns("noip/status"), "connection dyndns noip"); diag explain $res;
+  ok($res = $fbx->upd_connection_dyndns("noip/status", {enabled=>\0}), "connection dyndns noip"); #diag explain $res;
 };
 
 if ( my $err = $@ ) {

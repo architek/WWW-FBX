@@ -512,6 +512,26 @@ Global Connection getters.
   required => [],
 ) for qw(connection connection/config connection/ipv6/config connection/xdsl/ connection/ftth);
 
+fbx_api_method upd_connection => (
+  description => <<'',
+Update the connection configuration.
+
+  path => 'connection/config/',
+  method => 'PUT',
+  params => [qw/ping remote_access remote_access_port wol adblock allow_token_request/],
+  required => [qw//],
+);
+
+fbx_api_method upd_ipv6_config => (
+  description => <<'',
+Update the ipv6 connection configuration.
+
+  path => 'connection/ipv6/config/',
+  method => 'PUT',
+  params => [qw/ ipv6_enabled delegations/],
+  required => [qw//],
+);
+
 fbx_api_method connection_dyndns => (
   description => <<'',
 Get status or config of dyndns provider.
@@ -519,6 +539,16 @@ Get status or config of dyndns provider.
   path => 'connection/ddns/',
   method => 'GET',
   params => [qw/suff/],
+  required => [qw/suff/],
+);
+
+fbx_api_method upd_connection_dyndns => (
+  description => <<'',
+Set config of dyndns provider.
+
+  path => 'connection/ddns/',
+  method => 'GET',
+  params => [qw/suff enabled user password hostname/],
   required => [qw/suff/],
 );
 

@@ -58,7 +58,7 @@ sub _prepare_request {
  
     my $msg;
  
-#    use Data::Dumper ; print "$http_method: $uri\n"; print "params:", Dumper $args;
+    use Data::Dumper ; print "$http_method: $uri\n"; print "params:", Dumper $args;
     if( $http_method eq 'PUT' ) {
         $msg = PUT( $uri, Content => encode_json  $args  );
     }
