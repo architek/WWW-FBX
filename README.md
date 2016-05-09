@@ -79,7 +79,7 @@ The full json response of the last request is available through the uar method (
 
 Api methods will _die_ if the APIResponse is an error. It is up to the caller to handle this exception.
 
-The currently available services implemented in this module is given in [WWW::FBX::Role::API::APIv3](https://metacpan.org/pod/WWW::FBX::Role::API::APIv3).
+The list of currently available services implemented in this module is given in [WWW::FBX::Role::API::APIv3](https://metacpan.org/pod/WWW::FBX::Role::API::APIv3).
 
 This distribution is heavily inspired from [Net::Twitter](https://metacpan.org/pod/Net::Twitter).
 
