@@ -23,9 +23,9 @@ eval {
   ok( $res = $fbx->wifi_ap, "wifi all ap");
   ok( $res = $fbx->wifi_ap(0), "wifi ap");
   ok( $res = $fbx->wifi_ap("0/allowed_channel_comb"), "wifi ap allowed combination");
-  ok( $res = $fbx->wifi_ap("0/stations"), "wifi ap connected stations"); #diag explain $res;
+  ok( $res = $fbx->wifi_ap("0/stations"), "wifi ap connected stations"); diag "connected stations: ", join( ', ', map($_->{hostname},@$res) );
   ok( $res = $fbx->wifi_ap("0/neighbors"), "wifi ap neighbors"); #diag explain $res;
-  ok( $res = $fbx->wifi_ap("0/channel_usage"), "wifi ap channel usage"); diag explain $res;
+  ok( $res = $fbx->wifi_ap("0/channel_usage"), "wifi ap channel usage"); #diag explain $res;
   ok( $res = $fbx->wifi_bss, "wifi bss"); #diag explain $res;
   ok( $res = $fbx->wifi_bss( $res->[0]{id} )); #diag explain $res;
   ok($fbx->wifi_planning, "wifi planning");
