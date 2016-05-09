@@ -155,7 +155,7 @@ Authentication is provided through the Auth role but other authentication mechan
             app_id => "APP ID",
             app_name => "APP NAME",
             app_version => "1.0",
-            device_name => "debian",
+            device_name => "MY DEVICE",
             track_id => "48",
             app_token => "2/g43EZYD8AO7tbnwwhmMxMuELtTCyQrV1goMgaepHWGrqWlloWmMRszCuiN2ftp",
         );
@@ -182,27 +182,37 @@ Authentication is provided through the Auth role but other authentication mechan
 
 =head1 DESCRIPTION
 
-This module provides a perl interface to the L<Freebox|https://en.wikipedia.org/wiki/Freebox#V6_generation.2C_Freebox_Revolution> v6 APIs. See L<http://dev.freebox.fr/sdk/os/> for a full description of the APIs.
+This module provides a perl interface to the L<Freebox|https://en.wikipedia.org/wiki/Freebox#V6_generation.2C_Freebox_Revolution> v6 APIs. 
+
+See L<http://dev.freebox.fr/sdk/os/> for a full description of the APIs.
 
 =head1 METHODS AND ARGUMENTS
 
-Mandatory constructor parameters are app_id, app_name, app_version, device_name.
+ my $fbx = WWW::FBX->new( app_id => "APP ID", app_name => "APP NAME",
+                          app_version => "1.0", device_name => "device" );
 
+ my $fbx = WWW::FBX->new( app_id => "APP ID", app_name => "APP NAME",
+                          app_version => "1.0", device_name => "device", 
+                          track_id => "48", app_token => "2/g43EZYD8AO7tbnwwhmMxMuELtTCyQrV1goMgaepHWGrqWlloWmMRszCuiN2ftp" );
+
+Mandatory constructor parameters are app_id, app_name, app_version, device_name. 
 When track_id and app_token are also provided, they will be used to authenticate.
 Otherwise, new track_id and app_token will be given by the freebox. These can be then used for later access.
-Note that adding the settings permission is only possible through the web interface (Paramètres de la Freebox -> Gestion des accès -> Applications)
+
+Note that adding the I<settings> or I<parental> permissions is only possible through the web interface (Paramètres de la Freebox -> Gestion des accès -> Applications)
 
 The constructor takes care of detecting the API version and authentication.
 
-Return values are perl hashes.
 
-The hash response of the last request is available through the uar method.
+The return value of all api methods is the L<http://dev.freebox.fr/sdk/os/#APIResponse.result|result> structure of APIResponse, or undef if no result is returned.
 
-The HTTP::Response is available through the uarh method.
+The full json response of the last request is available through the uar method (usefull when using the I<new> method) and the complete HTTP::Response is available through the uarh method.
+
+Api methods will I<die> if the APIResponse is an error. It is up to the caller to handle this exception.
+
+The list of currently available services implemented in this module is given in L<WWW::FBX::Role::API::APIv3>.
 
 This distribution is heavily inspired from L<Net::Twitter>.
-
-The currently available services implemented in this module is given in L<WWW::FBX::Role::API::APIv3>. Pull requests are welcome!
 
 =head1 LICENSE
 
