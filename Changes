@@ -1,6 +1,8 @@
 Revision history for Perl extension WWW-FBX
 
 {{$NEXT}}
+
+0.11 2016-05-09T22:27:22Z
     - Added RRD
     - More NAT, Wifi
     - Slight improve of the POD
