@@ -624,6 +624,15 @@ Global airmedia getters.
 ) for qw(airmedia/config airmedia/receivers/);
 
 #RRD
+fbx_api_method rrd => (
+  description => <<'',
+Get the RRD stats.
+
+  path => 'rrd/',
+  method => 'POST',
+  params => [qw/db date_start date_end precision fields/],
+  required => [qw/db/],
+);
 
 #CALL
 fbx_api_method s'/'_'gr => (
@@ -1034,7 +1043,13 @@ WWW::FBX::Role::API::APIv3 is the freebox6 API version 3 as a Moose Role
 API documentation is given here: L<http://dev.freebox.fr/sdk/os/>
 The following methods are currently implemented in this library:
 
-=head2 call
+=head2 RRD
+
+=head3 get rrd stats
+
+ $fbx->rrd( { db => "temp", fields => [ "cpub" ], precision => 1 } );
+
+=head2 call and contacts
 
 =head3 call log
 
