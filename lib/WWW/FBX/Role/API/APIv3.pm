@@ -805,15 +805,25 @@ Set the FTP config.
 );
 
 #NAT
+fbx_api_method fw_dmz => (
+  description => <<'',
+Get dmz config.
+
+  path => "fw/dmz/",
+  method => 'GET',
+  params => [ ],
+  required => [ ],
+);
+
 fbx_api_method s'/'_'gr => (
   description => <<'',
 Global NAT getters.
 
   path => $_,
   method => 'GET',
-  params => [ ],
-  required => [ ],
-) for qw(fw/dmz fw/redir/ fw/incoming/);
+  params => [ qw/suff/ ],
+  required => [ qw/suff/ ],
+) for qw(fw/redir/ fw/incoming/);
 #TODO rest
 
 #UPNP
@@ -1368,13 +1378,21 @@ The following methods are currently implemented in this library:
 
  $fbx->fw_dmz;
 
-=head3 fw redir
+=head3 fw all redir
 
  $fbx->fw_redir;
 
-=head3 fw incoming
+=head3 fw redir
+
+ $fbx->fw_redir(0);
+
+=head3 fw all incoming
 
  $fbx->fw_incoming;
+
+=head3 fw incoming
+
+ $fbx->fw_incoming("bittorent-main");
 
 =head2 parental
 
