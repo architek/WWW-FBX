@@ -6,6 +6,7 @@ plan skip_all => "FBX_APP_ID, FBX_APP_NAME, FBX_APP_VERSION, FBX_TRACK_ID, FBX_A
     unless $ENV{FBX_APP_ID} and $ENV{FBX_APP_NAME} and $ENV{FBX_APP_VERSION} and $ENV{FBX_TRACK_ID} and $ENV{FBX_APP_TOKEN};
 
 my $fbx;
+my $res;
 
 eval { 
   $fbx = WWW::FBX->new ( 
@@ -19,8 +20,14 @@ eval {
   
   isa_ok $fbx, "WWW::FBX", "wifi";
   ok($fbx->wifi_config, "wifi config");
-  ok($fbx->wifi_ap, "wifi ap");
-  ok($fbx->wifi_bss, "wifi bss");
+  ok( $res = $fbx->wifi_ap, "wifi all ap");
+  ok( $res = $fbx->wifi_ap(0), "wifi ap");
+  ok( $res = $fbx->wifi_ap("0/allowed_channel_comb"), "wifi ap allowed combination");
+  ok( $res = $fbx->wifi_ap("0/stations"), "wifi ap connected stations"); #diag explain $res;
+  ok( $res = $fbx->wifi_ap("0/neighbors"), "wifi ap neighbors"); #diag explain $res;
+  ok( $res = $fbx->wifi_ap("0/channel_usage"), "wifi ap channel usage"); diag explain $res;
+  ok( $res = $fbx->wifi_bss, "wifi bss"); #diag explain $res;
+  ok( $res = $fbx->wifi_bss( $res->[0]{id} )); #diag explain $res;
   ok($fbx->wifi_planning, "wifi planning");
   ok($fbx->wifi_mac_filter, "wifi mac filter");
 };

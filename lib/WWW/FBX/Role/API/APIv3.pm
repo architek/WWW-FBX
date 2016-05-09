@@ -920,7 +920,17 @@ Global Wifi getters.
   method => 'GET',
   params => [ ],
   required => [ ],
-) for qw(wifi/config wifi/ap wifi/bss wifi/planning wifi/mac_filter);
+) for qw(wifi/config wifi/planning wifi/mac_filter);
+
+fbx_api_method s'/'_'gr => (
+  description => <<'',
+Wifi AP and bss configuration.
+
+  path => $_,
+  method => 'GET',
+  params => [ qw/suff/ ],
+  required => [ qw/suff/ ],
+) for qw( wifi/ap/ wifi/bss/ );
 
 #TODO finish
 
@@ -1498,13 +1508,37 @@ The following methods are currently implemented in this library:
 
  $fbx->wifi_config;
 
-=head3 wifi ap
+=head3 wifi ap list
 
  $fbx->wifi_ap;
 
-=head3 wifi bss
+=head3 wifi ap
+
+ $fbx->wifi_ap(0);
+
+=head3 wifi ap allowed combinations
+
+ $fbx->wifi_ap( "0/allowed_channel_comb" );
+
+=head3 wifi ap connected stations
+
+ $fbx->wifi_ap( "0/stations" );
+
+=head3 wifi ap neighbors
+
+ $fbx->wifi_ap( "0/neighbors" );
+
+=head3 wifi ap channel usage
+
+ $fbx->wifi_ap( "0/channel_usage" );
+
+=head3 wifi all bss
 
  $fbx->wifi_bss;
+
+=head3 wifi of a bss
+
+ $fbx->wifi_bss( "00:24:D4:AA:BB:CC" );
 
 =head3 wifi planning
 
