@@ -8,13 +8,12 @@ use URI::Escape;
 use namespace::autoclean;
 
 Moose::Exporter->setup_import_methods(
-    with_caller => [ qw/api_url base_url fbx_api_method/ ],
+    with_caller => [ qw/api_url fbx_api_method/ ],
 );
 
-my ($_api_url, $_base_url) = ( "", "http://mafreebox.free.fr" );
+my $_api_url;
 
 sub api_url { $_api_url = $_[1]; }
-sub base_url { $_base_url = $_[1]; }
 
 sub fbx_api_method {
     my $caller = shift;
@@ -64,7 +63,7 @@ sub fbx_api_method {
         my $path = $options{path};
         $path .= delete $args->{suff} if exists $args->{suff};
 
-        my $uri = URI->new("$_base_url$_api_url/$path");
+        my $uri = URI->new( $self->base_url . "$_api_url/$path");
 
         return $self->_json_request(
             $options{method},

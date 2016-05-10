@@ -73,7 +73,7 @@ Note that adding the _settings_ or _parental_ permissions is only possible throu
 
 The constructor takes care of detecting the API version and authentication.
 
-The return value of all api methods is the [http://dev.freebox.fr/sdk/os/#APIResponse.result|result](http://dev.freebox.fr/sdk/os/#APIResponse.result|result) structure of APIResponse, or undef if no result is returned.
+The return value of all api methods is the [result](http://dev.freebox.fr/sdk/os/#APIResponse.result) structure of APIResponse, or undef if no result is returned.
 
 The full json response of the last request is available through the uar method (usefull when using the _new_ method) and the complete HTTP::Response is available through the uarh method.
 

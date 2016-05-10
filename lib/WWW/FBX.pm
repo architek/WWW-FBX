@@ -17,12 +17,13 @@ use namespace::autoclean;
 
 our $VERSION = "0.11";
 
+has base_url    => ( isa => 'Str', is => 'ro', default => 'http://mafreebox.free.fr' );
 has lwp_args    => ( isa => 'HashRef', is => 'ro', default => sub { {} } );
+has [ qw/app_id app_name app_version device_name/ ] => ( 
+    isa => 'Str', is => 'ro', required => 1 );
 has ua          => ( isa => 'LWP::UserAgent', is => 'rw', lazy => 1, builder => '_build_ua' );
 has uar         => ( isa => 'HashRef', is => 'rw' );
 has uarh        => ( isa => 'HTTP::Response', is => 'rw' );
-has [ qw/app_id app_name app_version device_name/ ] => ( 
-    isa => 'Str', is => 'ro', required => 1 );
 
 has _json_handler   => (
     is      => 'rw',
@@ -158,6 +159,7 @@ Authentication is provided through the Auth role but other authentication mechan
             device_name => "MY DEVICE",
             track_id => "48",
             app_token => "2/g43EZYD8AO7tbnwwhmMxMuELtTCyQrV1goMgaepHWGrqWlloWmMRszCuiN2ftp",
+            base_url => "http://12.34.56.78:3333",
         );
         print "You are now authenticated with track_id ", $fbx->track_id, " and app_token ", $fbx->app_token, "\n";
         print "App permissions are:\n";
@@ -193,11 +195,13 @@ See L<http://dev.freebox.fr/sdk/os/> for a full description of the APIs.
 
  my $fbx = WWW::FBX->new( app_id => "APP ID", app_name => "APP NAME",
                           app_version => "1.0", device_name => "device", 
-                          track_id => "48", app_token => "2/g43EZYD8AO7tbnwwhmMxMuELtTCyQrV1goMgaepHWGrqWlloWmMRszCuiN2ftp" );
+                          track_id => "48", app_token => "2/g43EZYD8AO7tbnwwhmMxMuELtTCyQrV1goMgaepHWGrqWlloWmMRszCuiN2ftp",
+                          base_url => "http://12.34.56.78:3333" );
 
 Mandatory constructor parameters are app_id, app_name, app_version, device_name. 
 When track_id and app_token are also provided, they will be used to authenticate.
 Otherwise, new track_id and app_token will be given by the freebox. These can be then used for later access.
+base_url defaults to http://mafreebox.free.fr which is the base uri when accessing the freebox from the LAN side.
 
 Note that adding the I<settings> or I<parental> permissions is only possible through the web interface (Paramètres de la Freebox -> Gestion des accès -> Applications)
 
