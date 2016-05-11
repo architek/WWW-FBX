@@ -641,7 +641,7 @@ Global call getters.
 
   path => $_,
   method => 'GET',
-  params => [ ],
+  params => [ qw/suff/ ],
   required => [ ],
 ) for qw(call/log/);
 
