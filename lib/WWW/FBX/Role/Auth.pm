@@ -29,7 +29,7 @@ sub BUILD {
   while( ( $au_sts = $res->{status} ) eq "pending" ) { 
     $challenge = $res->{challenge};
     print "Please Confirm on the FB - Merci d'autoriser sur la FB\n";
-    $self->auth_progress( $self->track_id );
+    $res = $self->auth_progress( $self->track_id );
     sleep 1;
   }
 
