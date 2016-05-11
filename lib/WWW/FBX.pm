@@ -24,12 +24,26 @@ has [ qw/app_id app_name app_version device_name/ ] => (
 has ua          => ( isa => 'LWP::UserAgent', is => 'rw', lazy => 1, builder => '_build_ua' );
 has uar         => ( isa => 'HashRef', is => 'rw' );
 has uarh        => ( isa => 'HTTP::Response', is => 'rw' );
+has debug       => ( isa => 'Bool', is => 'rw', default => 0, trigger => \&_set_debug );
 
 has _json_handler   => (
     is      => 'rw',
     default => sub { JSON->new->allow_nonref },
     handles => { from_json => 'decode' },
 );
+
+sub _set_debug {
+    my ( $self, $debug, $odebug) = @_ ;
+    if ( defined $odebug and $odebug != $debug or $debug ) {
+        if ($debug) {
+            $self->ua->add_handler("request_send", sub { print ">" x 25, "\n"; shift->dump; return });
+            $self->ua->add_handler("response_done", sub { print "<" x 25, "\n"; shift->dump; return });
+        } else {
+            $self->ua->remove_handler("request_send");
+            $self->ua->remove_handler("response_done");
+        }
+    }
+}
  
 sub _build_ua {
     my $self = shift;
@@ -59,7 +73,6 @@ sub _prepare_request {
  
     my $msg;
  
-    use Data::Dumper ; print "$http_method: $uri\n"; print "params:", Dumper $args;
     if( $http_method eq 'PUT' ) {
         $msg = PUT( $uri, Content => encode_json  $args  );
     }
@@ -160,6 +173,7 @@ Authentication is provided through the Auth role but other authentication mechan
             track_id => "48",
             app_token => "2/g43EZYD8AO7tbnwwhmMxMuELtTCyQrV1goMgaepHWGrqWlloWmMRszCuiN2ftp",
             base_url => "http://12.34.56.78:3333",
+            debug => 1,
         );
         print "You are now authenticated with track_id ", $fbx->track_id, " and app_token ", $fbx->app_token, "\n";
         print "App permissions are:\n";
@@ -196,7 +210,8 @@ See L<http://dev.freebox.fr/sdk/os/> for a full description of the APIs.
  my $fbx = WWW::FBX->new( app_id => "APP ID", app_name => "APP NAME",
                           app_version => "1.0", device_name => "device", 
                           track_id => "48", app_token => "2/g43EZYD8AO7tbnwwhmMxMuELtTCyQrV1goMgaepHWGrqWlloWmMRszCuiN2ftp",
-                          base_url => "http://12.34.56.78:3333" );
+                          base_url => "http://12.34.56.78:3333" ,
+                          debug => 1 );
 
 Mandatory constructor parameters are app_id, app_name, app_version, device_name. 
 When track_id and app_token are also provided, they will be used to authenticate.

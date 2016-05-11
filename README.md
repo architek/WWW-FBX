@@ -29,6 +29,7 @@ Authentication is provided through the Auth role but other authentication mechan
             track_id => "48",
             app_token => "2/g43EZYD8AO7tbnwwhmMxMuELtTCyQrV1goMgaepHWGrqWlloWmMRszCuiN2ftp",
             base_url => "http://12.34.56.78:3333",
+            debug => 1,
         );
         print "You are now authenticated with track_id ", $fbx->track_id, " and app_token ", $fbx->app_token, "\n";
         print "App permissions are:\n";
@@ -65,7 +66,8 @@ See [http://dev.freebox.fr/sdk/os/](http://dev.freebox.fr/sdk/os/) for a full de
     my $fbx = WWW::FBX->new( app_id => "APP ID", app_name => "APP NAME",
                              app_version => "1.0", device_name => "device", 
                              track_id => "48", app_token => "2/g43EZYD8AO7tbnwwhmMxMuELtTCyQrV1goMgaepHWGrqWlloWmMRszCuiN2ftp",
-                             base_url => "http://12.34.56.78:3333" );
+                             base_url => "http://12.34.56.78:3333" ,
+                             debug => 1 );
 
 Mandatory constructor parameters are app\_id, app\_name, app\_version, device\_name. 
 When track\_id and app\_token are also provided, they will be used to authenticate.
