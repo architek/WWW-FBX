@@ -1,6 +1,8 @@
 Revision history for Perl extension WWW-FBX
 
 {{$NEXT}}
+
+0.12 2016-05-11T21:01:01Z
     - base_url really belongs to FBX
     - base_url as ro attribute to use WWW::FBX from WAN side
     - basic logger
