@@ -8,6 +8,8 @@ use Devel::StackTrace;
 use overload '""' => \&error,
              'fallback' => 1;
 
+use namespace::autoclean;
+
 
 has fbx_error   => ( is => 'rw', predicate => 'has_fbx_error' );
 has http_response   => ( isa => 'HTTP::Response', is => 'rw', required => 1, handles => [qw/code message/] );
