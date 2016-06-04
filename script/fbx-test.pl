@@ -22,7 +22,7 @@ eval {
   }
 
   $res = $fbx->connection;
-  print "Your ", $res->{result}{media}, " internet connection state is ", $res->{result}{state}, "\n";
+  print "Your ", $res->{media}, " internet connection state is ", $res->{state}, "\n";
 };
 
 if ( my $err = $@ ) {
