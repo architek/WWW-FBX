@@ -2,6 +2,9 @@ Revision history for Perl extension WWW-FBX
 
 {{$NEXT}}
 
+0.14 2016-06-04T22:40:44Z
+    - Corrected a bug in test script
+
 0.13 2016-05-11T23:12:32Z
     - Corrected a bug in auth role
 
