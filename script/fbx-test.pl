@@ -30,13 +30,19 @@ eval {
     store { track_id => $fbx->track_id, app_token => $fbx->app_token }, $store;
   }
 
-  print "App permissions are:\n";
-  while ( my( $key, $value ) = each %{ $fbx->uar->{result}{permissions} } ) {
-    print "\t $key\n" if $value;
+  if ( my $cmd = $ARGV[0] ) {
+    #Execute passed command
+    use Data::Dumper;
+    print Dumper $fbx->$cmd;
+  } else {
+    #Just run a simple test
+    print "App permissions are:\n"; 
+    while ( my( $key, $value ) = each %{ $fbx->uar->{result}{permissions} } ) { 
+      print "\t $key\n" if $value; 
+    }
+    $res = $fbx->connection;
+    print "Your ", $res->{media}, " internet connection state is ", $res->{state}, "\n";
   }
-
-  $res = $fbx->connection;
-  print "Your ", $res->{media}, " internet connection state is ", $res->{state}, "\n";
 };
 
 if ( my $err = $@ ) {
