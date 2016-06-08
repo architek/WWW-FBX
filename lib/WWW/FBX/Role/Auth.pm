@@ -1,5 +1,5 @@
 package WWW::FBX::Role::Auth;
-use 5.008001;
+use 5.014001;
 use Moose::Role;
 use Digest::HMAC_SHA1 qw/ hmac_sha1_hex /;
 

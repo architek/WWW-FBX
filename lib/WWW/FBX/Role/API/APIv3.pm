@@ -1,5 +1,5 @@
 package WWW::FBX::Role::API::APIv3;
-use 5.008001;
+use 5.014001;
 use Moose::Role;
 use WWW::FBX::API;
 use MIME::Base64 qw/encode_base64 decode_base64/;

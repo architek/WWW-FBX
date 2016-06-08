@@ -1,5 +1,5 @@
 package WWW::FBX::API;
-use 5.008001;
+use 5.014001;
 use Moose();
 use Carp::Clan qw/^(?:WWW::FBX|Moose|Class::MOP)/;
 use Moose::Exporter;
@@ -45,7 +45,6 @@ sub fbx_api_method {
             $args->{$param} = shift;
         }
 
-        #find unknown keys
         for my $arg (keys %$args) {
             unless ( grep { $_ eq $arg } @$all_args ) {
                 die "Unknown argument $arg for $name\n" , "Description:$options{description}" ,
@@ -53,7 +52,6 @@ sub fbx_api_method {
             }
         }
 
-        #find missing req
         for my $req (@$arg_names) {
             unless ( grep { $_ eq $req } keys %$args or !defined ($args->{req}) ) {
                 die "Missing required param $req for $name\n", "Description:$options{description}" ,

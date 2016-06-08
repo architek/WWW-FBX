@@ -1,5 +1,5 @@
 package WWW::FBX::Error;
-use 5.008001;
+use 5.014001;
 use Moose;
 use Try::Tiny;
 use Devel::StackTrace;
