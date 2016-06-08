@@ -2,7 +2,6 @@
 use strict;
 use warnings;
 use WWW::FBX;
-use Scalar::Util 'blessed';
 
 my $res;
 eval { 
