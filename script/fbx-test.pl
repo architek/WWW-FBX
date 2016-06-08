@@ -1,20 +1,35 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use Scalar::Util "blessed";
+use Storable;
 use WWW::FBX;
 
+my $store = 'app_token';
 my $res;
-eval { 
-  my $fbx = WWW::FBX->new( 
-    app_id => "APP ID", 
+my $conn = {
+    app_id => "APP ID",
     app_name => "APP NAME",
     app_version => "1.0",
     device_name => "debian",
-# Fill in track_id and app_token once they've been given by Freebox
-#    track_id => "48",
-#    app_token => "2/g43EZYD8AO7tbnwwhmMxMuELtTCyQrV1goMgaepHWGrqWlloWmMRszCuiN2ftp",
-  );
-  print "You are now authenticated with track_id ", $fbx->track_id, " and app_token ", $fbx->app_token, "\n";
+};
+
+eval {
+
+  if (-f $store) {
+    my $token = retrieve $store;
+    %$conn = ( %$conn, %$token );
+    print "Retrieved track_id and app_token from $store\n";
+  } else {
+    print "No stored token found\n";
+  }
+  my $fbx = WWW::FBX->new( $conn );
+  unless ( -f $store ) {
+    print "Storing token in current directory for further usage [ track_id = ", $fbx->track_id, " app_token = ", $fbx->app_token, " ]\n";
+    print "You can add the remaining permissions by connecting on the web interface\n";
+    store { track_id => $fbx->track_id, app_token => $fbx->app_token }, $store;
+  }
+
   print "App permissions are:\n";
   while ( my( $key, $value ) = each %{ $fbx->uar->{result}{permissions} } ) {
     print "\t $key\n" if $value;
