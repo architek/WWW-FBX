@@ -53,8 +53,8 @@
             "Moose" : "0",
             "Scalar::Util" : "0",
             "Try::Tiny" : "0",
-            "URI" : "0",
             "URI::Escape" : "0",
+            "namespace::autoclean" : "0",
             "perl" : "5.014001"
          }
       },
