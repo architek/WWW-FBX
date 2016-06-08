@@ -45,13 +45,10 @@
             "Carp::Clan" : "0",
             "Devel::StackTrace" : "0",
             "Digest::HMAC_SHA1" : "0",
-            "Encode" : "0",
             "HTTP::Request" : "0",
             "JSON::MaybeXS" : "0",
             "LWP::UserAgent" : "0",
-            "MIME::Base64" : "0",
             "Moose" : "0",
-            "Scalar::Util" : "0",
             "Try::Tiny" : "0",
             "URI::Escape" : "0",
             "namespace::autoclean" : "0",
@@ -76,5 +73,5 @@
          "web" : "https://github.com/architek/WWW-FBX"
       }
    },
-   "version" : "0.15"
+   "version" : "0.16"
 }

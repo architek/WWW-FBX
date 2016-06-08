@@ -2,6 +2,11 @@ Revision history for Perl extension WWW-FBX
 
 {{$NEXT}}
 
+0.16 2016-06-08T21:14:57Z
+    Enhanced a bit the script fbx-test.pl to allow
+    - Storage of token
+    - Sending single commands e.g. fbx-test.pl reboot to reboot the freebox
+
 0.15 2016-06-08T19:53:33Z
     - Fixed dependencies
     - Added Kwalitee
