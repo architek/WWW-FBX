@@ -25,7 +25,7 @@ eval {
   }
   my $fbx = WWW::FBX->new( $conn );
   unless ( -f $store ) {
-    print "Storing token in current directory for further usage [ track_id = ", $fbx->track_id, " app_token = ", $fbx->app_token, " ]\n";
+    print "Storing token in $store in current directory for further usage [ track_id = ", $fbx->track_id, " app_token = ", $fbx->app_token, " ]\n";
     print "You can add the remaining permissions by connecting on the web interface\n";
     store { track_id => $fbx->track_id, app_token => $fbx->app_token }, $store;
   }
