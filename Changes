@@ -2,6 +2,9 @@ Revision history for Perl extension WWW-FBX
 
 {{$NEXT}}
 
+0.17 2016-06-20T19:13:15Z
+    Updated description
+
 0.16 2016-06-08T21:14:57Z
     Enhanced a bit the script fbx-test.pl to allow
     - Storage of token

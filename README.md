@@ -4,7 +4,7 @@
 
 # NAME
 
-WWW::FBX - A perl interface to the Freebox v6 Rest API
+WWW::FBX - Freebox v6 OS Perl Interface
 
 # FREEBOX SDK API 3.0
 
@@ -85,6 +85,8 @@ The full json response of the last request is available through the uar method (
 Api methods will _die_ if the APIResponse is an error. It is up to the caller to handle this exception.
 
 The list of currently available services implemented in this module is given in [WWW::FBX::Role::API::APIv3](https://metacpan.org/pod/WWW::FBX::Role::API::APIv3).
+
+A script called fbx\_test.pl is provided which can be used to get tokens and send single commands.
 
 This distribution is heavily inspired from [Net::Twitter](https://metacpan.org/pod/Net::Twitter).
 
