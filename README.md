@@ -84,11 +84,30 @@ The full json response of the last request is available through the uar method (
 
 Api methods will _die_ if the APIResponse is an error. It is up to the caller to handle this exception.
 
+# QUICK START
+
 The list of currently available services implemented in this module is given in [WWW::FBX::Role::API::APIv3](https://metacpan.org/pod/WWW::FBX::Role::API::APIv3).
 
-A script called fbx\_test.pl is provided which can be used to get tokens and send single commands.
+A script called fbx\_test.pl is provided in script to show how to send commands and handle exceptions. 
 
-This distribution is heavily inspired from [Net::Twitter](https://metacpan.org/pod/Net::Twitter).
+It can also be used standalone to get tokens and send a command.
+
+On first call, you will be requested to physically authenticate on the freebox itself. Once done, the token is stored in the current directory in a file called app\_token. You can then grant all permissions on the freebox web interface to allow all commands.
+
+When suffix parameter is required, pass it as a normal parameter.
+
+When more parameters are required, it is possible to send a json structure, see EXAMPLES. You need to escape the accolades though.
+
+# EXAMPLES
+
+    fbx-test.pl --help
+    fbx-test.pl connection
+    fbx-test.pl system
+    fbx-test.pl call_log
+    fbx-test.pl call_log 2053
+    fbx-test.pl reboot
+    fbx-test.pl reset_freeplug F4:CA:42:22:53:EF/reset
+    fbx-test.pl cp '{"files":["Disque dur/ds.txt"], "dst":"Disque dur/Temp", "mode":"both"}'
 
 # LICENSE
 

@@ -30,10 +30,33 @@ eval {
     store { track_id => $fbx->track_id, app_token => $fbx->app_token }, $store;
   }
 
-  if ( my $cmd = $ARGV[0] ) {
-    #Execute passed command
-    use Data::Dumper;
-    print Dumper $fbx->$cmd;
+  if ( @ARGV ) {
+    my ( $cmd , @param ) = @ARGV;
+    if ($cmd =~ /^--?h/) {
+      print "Usage : $0 [COMMAND] [PARAMETERS]\n";
+      print "Control FreeboxOs v6 through its API v3\n\n";
+      print "Without OMMAND, the script will list the permission granted and display your internet connection state as an example.\n\n";
+      print "List of COMMAND and PARAMETERS are:\n";
+      for my $role ( @{ $fbx->meta->roles } ) {
+        if ($role->{package} eq "WWW::FBX::Role::API::APIv3") {
+          for my $meth ( sort $role->get_method_list ) {
+            next if $meth eq "meta";
+            print "\t$meth (", join(" , ", @{$role->get_method($meth)->params}), ")\n";
+          }
+        }
+      }
+    } else {
+      #Execute passed command
+      use Data::Dumper;
+      if ($param[0] and $param[0] =~ /{/) {
+        use JSON;
+        my $param= join('',@param);
+        my $hash = from_json($param);
+        print Dumper $fbx->$cmd($hash);
+      } else {
+        print Dumper $fbx->$cmd(@param);
+      }
+    }
   } else {
     #Just run a simple test
     print "App permissions are:\n"; 
