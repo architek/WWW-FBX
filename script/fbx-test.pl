@@ -3,16 +3,36 @@ use strict;
 use warnings;
 use Scalar::Util "blessed";
 use Storable;
+use Data::Dumper;
+use Getopt::Long;
+use JSON;
 use WWW::FBX;
 
+my $fbx;
 my $store = 'app_token';
-my $res;
 my $conn = {
     app_id => "APP ID",
     app_name => "APP NAME",
     app_version => "1.0",
     device_name => "debian",
 };
+my $json;
+my $res;
+
+sub die_helper {
+  print "Usage : $0 [COMMAND] [PARAMETERS]\n";
+  print "Control FreeboxOs v6 through its API v3\n\n";
+  print "Without COMMAND, the script will list the permission granted and display your internet connection state as an example.\n\n";
+  print "List of COMMAND and PARAMETERS are:\n";
+  for my $role ( @{ $fbx->meta->roles } ) {
+    if ($role->{package} eq "WWW::FBX::Role::API::APIv3") {
+      for my $meth ( sort $role->get_method_list ) {
+        print "\t$meth (", join(" , ", @{$role->get_method($meth)->params}), ")\n" unless $meth eq "meta";
+      }
+    }
+  }
+  exit;
+}
 
 eval {
 
@@ -23,48 +43,32 @@ eval {
   } else {
     print "No stored token found\n";
   }
-  my $fbx = WWW::FBX->new( $conn );
+  $fbx = WWW::FBX->new( $conn );
   unless ( -f $store ) {
     print "Storing token in $store in current directory for further usage [ track_id = ", $fbx->track_id, " app_token = ", $fbx->app_token, " ]\n";
     print "You can add the remaining permissions by connecting on the web interface\n";
     store { track_id => $fbx->track_id, app_token => $fbx->app_token }, $store;
   }
 
-  if ( @ARGV ) {
-    my ( $cmd , @param ) = @ARGV;
-    if ($cmd =~ /^--?h/) {
-      print "Usage : $0 [COMMAND] [PARAMETERS]\n";
-      print "Control FreeboxOs v6 through its API v3\n\n";
-      print "Without OMMAND, the script will list the permission granted and display your internet connection state as an example.\n\n";
-      print "List of COMMAND and PARAMETERS are:\n";
-      for my $role ( @{ $fbx->meta->roles } ) {
-        if ($role->{package} eq "WWW::FBX::Role::API::APIv3") {
-          for my $meth ( sort $role->get_method_list ) {
-            next if $meth eq "meta";
-            print "\t$meth (", join(" , ", @{$role->get_method($meth)->params}), ")\n";
-          }
-        }
-      }
-    } else {
-      #Execute passed command
-      use Data::Dumper;
-      if ($param[0] and $param[0] =~ /{/) {
-        use JSON;
-        my $param= join('',@param);
-        my $hash = from_json($param);
-        print Dumper $fbx->$cmd($hash);
-      } else {
-        print Dumper $fbx->$cmd(@param);
-      }
-    }
-  } else {
+  GetOptions(
+    'debug' => sub { $fbx->debug(1) },
+    'help' => \&die_helper,
+  ) or die_helper;
+
+  if (! defined (my $cmd = shift @ARGV) ) {
     #Just run a simple test
     print "App permissions are:\n"; 
     while ( my( $key, $value ) = each %{ $fbx->uar->{result}{permissions} } ) { 
       print "\t $key\n" if $value; 
     }
     $res = $fbx->connection;
-    print "Your ", $res->{media}, " internet connection state is ", $res->{state}, "\n";
+    printf "Your %s internet connection is %s\n", $res->{media}, $res->{state};
+  } elsif (eval { $json = from_json( $ARGV[0]) } ) {
+    #Execute with JSON
+    my $res = $fbx->$cmd($json);
+  } else {
+    #Execute non JSON
+    my $res = $fbx->$cmd(@ARGV);
   }
 };
 

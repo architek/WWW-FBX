@@ -88,20 +88,18 @@ Api methods will _die_ if the APIResponse is an error. It is up to the caller to
 
 The list of currently available services implemented in this module is given in [WWW::FBX::Role::API::APIv3](https://metacpan.org/pod/WWW::FBX::Role::API::APIv3).
 
-A script called fbx\_test.pl is provided in script to show how to send commands and handle exceptions. 
+A script called fbx\_test.pl is provided in the script directory.
 
-It can also be used standalone to get tokens and send a command.
+You should first call it without argument to store a token in app\_token on the disk. Once physically authenticated on the freebox itself, the token file will be reused for subsequent call. You can then grant all permissions on the freebox web interface if you will.
 
-On first call, you will be requested to physically authenticate on the freebox itself. Once done, the token is stored in the current directory in a file called app\_token. You can then grant all permissions on the freebox web interface to allow all commands.
+Witout parameter, a simple connection check is done, app permissions are shows and status of the internet connection is displayed.
 
-When suffix parameter is required, pass it as a normal parameter.
-
-When more parameters are required, it is possible to send a json structure, see EXAMPLES. You need to escape the accolades though.
+Commands requiring a suffix can be send by adding a simple parameters on the command line. When more parameters are required, it is possible to send a json structure, see EXAMPLES. You need to escape the accolades in that case.
 
 # EXAMPLES
 
     fbx-test.pl --help
-    fbx-test.pl connection
+    fbx-test.pl --debug connection
     fbx-test.pl system
     fbx-test.pl call_log
     fbx-test.pl call_log 2053
