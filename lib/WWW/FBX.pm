@@ -25,6 +25,7 @@ has ua          => ( isa => 'LWP::UserAgent', is => 'rw', lazy => 1, builder => 
 has uar         => ( isa => 'HashRef', is => 'rw' );
 has uarh        => ( isa => 'HTTP::Response', is => 'rw' );
 has debug       => ( isa => 'Bool', is => 'rw', default => 0, trigger => \&_set_debug );
+has noauth      => ( isa => 'Bool', is => 'ro', default => 0 );
 
 has _json_handler   => (
     is      => 'rw',
