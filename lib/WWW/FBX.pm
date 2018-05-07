@@ -151,9 +151,9 @@ __END__
 
 WWW::FBX - Freebox v6 OS Perl Interface
 
-=head1 FREEBOX SDK API 3.0
+=head1 FREEBOX SDK API 3.0 and 4.0
 
-This version provides the API 3.0 support through the APIv3 role but other version can be provided by creating a new role.
+This version provides the API 3.0 and 4.0 support through the APIv3 role but other version can be provided by creating a new role.
 
 =head1 AUTHENTICATION
 
