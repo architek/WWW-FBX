@@ -4,7 +4,7 @@
       "Laurent Kislaire <teebeenator@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v3.0.13, CPAN::Meta::Converter version 2.150005",
+   "generated_by" : "Minilla/v3.0.17, CPAN::Meta::Converter version 2.150010",
    "license" : [
       "perl_5"
    ],
@@ -73,9 +73,6 @@
          "web" : "https://github.com/architek/WWW-FBX"
       }
    },
-   "version" : "0.22",
-   "x_contributors" : [
-      "root <root@debian-asus>"
-   ],
-   "x_serialization_backend" : "JSON::PP version 2.27300_01"
+   "version" : "0.23",
+   "x_serialization_backend" : "JSON::PP version 2.27400_02"
 }
